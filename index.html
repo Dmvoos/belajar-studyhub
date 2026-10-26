@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Belajar — Study Hub per Mata Kuliah</title>
+<style>
+:root{
+  --bg:#0b1220; --bg2:#111a2e; --card:#16213a; --card2:#1c2947;
+  --ink:#e8eefc; --muted:#9fb0d0; --line:#26375c;
+  --accent:#38bdf8; --accent2:#6366f1; --ok:#22c55e; --bad:#ef4444; --warn:#f59e0b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:radial-gradient(1200px 600px at 80% -10%,#1a2547 0,var(--bg) 55%);
+  color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+.wrap{max-width:1040px;margin:0 auto;padding:0 18px}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(11,18,32,.88);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topin{display:flex;align-items:center;justify-content:space-between;padding:11px 0;gap:10px}
+.brand{font-weight:800;letter-spacing:.3px;display:flex;align-items:center;gap:9px;white-space:nowrap;cursor:pointer}
+.brand .dot{width:11px;height:11px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.crumbs{display:flex;gap:6px;align-items:center;flex-wrap:wrap;color:var(--muted);font-size:.85rem;min-width:0}
+.crumbs button{background:none;border:none;color:var(--muted);cursor:pointer;font:inherit;padding:3px 6px;border-radius:7px}
+.crumbs button:hover{color:var(--ink);background:var(--card2)}
+.crumbs .cur{color:var(--ink);font-weight:600}
+.crumbs .sep{opacity:.5}
+
+/* ---------- views ---------- */
+.view{padding:30px 0;min-height:60vh}
+.view[hidden]{display:none}
+.htitle{font-size:1.9rem;letter-spacing:-.5px;margin-bottom:6px}
+.hsub{color:var(--muted);margin-bottom:24px;max-width:720px}
+
+/* course grid */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(288px,1fr));gap:16px}
+.ccard{position:relative;background:linear-gradient(180deg,var(--card),var(--card2));
+  border:1px solid var(--line);border-radius:17px;padding:20px;cursor:pointer;transition:.18s;overflow:hidden}
+.ccard:hover{transform:translateY(-4px);border-color:var(--accent)}
+.ccard .cnum{font-size:2.3rem;font-weight:900;color:var(--line);line-height:1}
+.ccard h3{font-size:1.2rem;margin:10px 0 6px;letter-spacing:-.3px}
+.ccard .ceb{color:var(--accent);font-weight:700;font-size:.74rem;letter-spacing:.8px;text-transform:uppercase}
+.ccard p{color:var(--muted);font-size:.9rem;margin-top:8px}
+.ccard .ctags{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.tag{font-size:.72rem;font-weight:700;padding:4px 9px;border-radius:999px;background:var(--bg2);color:var(--muted);border:1px solid var(--line)}
+.tag.a{color:var(--accent);border-color:rgba(56,189,248,.35)}
+
+/* pertemuan list */
+.plist{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.pcard{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--line);
+  border-radius:15px;padding:18px;cursor:pointer;transition:.18s;display:flex;gap:14px;align-items:flex-start}
+.pcard:hover{transform:translateY(-3px);border-color:var(--accent)}
+.pcard .pnum{flex:0 0 44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#06122a;font-weight:800;display:grid;place-items:center;font-size:1.1rem}
+.pcard h4{font-size:1.1rem;margin-bottom:4px}
+.pcard .psub{color:var(--muted);font-size:.88rem}
+.pcard .ptags{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+
+/* content sections */
+.course{padding:10px 0}
+.cbanner{display:flex;align-items:flex-start;gap:16px;margin-bottom:8px;flex-wrap:wrap}
+.cnum{font-size:2.4rem;font-weight:900;color:var(--line);line-height:1}
+.chdr h2{font-size:1.6rem;letter-spacing:-.4px;margin-bottom:4px}
+.eyebrow{color:var(--accent);font-weight:700;font-size:.78rem;letter-spacing:1px;text-transform:uppercase}
+.csummary{color:var(--muted);margin-top:8px;max-width:720px}
+.ptitle{margin:18px 0 4px;font-size:1.25rem}
+
+.subsec{margin:28px 0}
+.sec-h{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.sec-h h3{font-size:1.25rem;letter-spacing:-.3px}
+.sec-h .n{background:var(--card2);color:var(--accent);font-weight:800;font-size:.85rem;
+  width:30px;height:30px;border-radius:9px;display:grid;place-items:center}
+.sec-sub{color:var(--muted);margin-bottom:16px;max-width:720px;font-size:.94rem}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:14px}
+.card{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--line);
+  border-radius:15px;padding:17px;transition:.18s}
+.card:hover{transform:translateY(-3px);border-color:var(--accent)}
+.card h4{font-size:1.02rem;margin-bottom:7px;display:flex;align-items:center;gap:8px}
+.card .lvl{font-size:.64rem;font-weight:800;letter-spacing:.5px;padding:3px 8px;border-radius:999px;
+  background:rgba(56,189,248,.15);color:var(--accent)}
+.card p{color:var(--muted);font-size:.9rem}
+.card ul{margin:7px 0 0 16px;color:var(--muted);font-size:.88rem}
+
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:13px}
+table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:560px}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--card2);font-weight:700}
+td.f{font-weight:700;color:var(--accent)}
+tr:last-child td{border-bottom:none}
+.low{color:#86efac}.diff{color:#fca5a5}
+
+.qbox{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:22px}
+.qmeta{display:flex;justify-content:space-between;color:var(--muted);font-size:.83rem;margin:4px 0 12px}
+.pbar{height:8px;background:var(--bg2);border-radius:999px;overflow:hidden;margin-bottom:16px}
+.pfill{height:100%;background:linear-gradient(90deg,var(--accent),#a5f3fc);width:0;transition:.3s}
+.qtext{font-size:1.08rem;font-weight:600;margin-bottom:14px}
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{text-align:left;background:var(--card2);border:2px solid var(--line);color:var(--ink);
+  padding:11px 14px;border-radius:11px;cursor:pointer;font-size:.94rem;transition:.15s;display:flex;gap:11px}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt .k{flex:0 0 23px;height:23px;border-radius:50%;background:var(--line);display:grid;place-items:center;font-weight:700;font-size:.76rem}
+.opt.correct{border-color:var(--ok);background:rgba(34,197,94,.13)}
+.opt.correct .k{background:var(--ok);color:#05230f}
+.opt.wrong{border-color:var(--bad);background:rgba(239,68,68,.13)}
+.opt.wrong .k{background:var(--bad);color:#fff}
+.opt:disabled{cursor:default}
+.fb{margin-top:13px;padding:12px 14px;border-radius:11px;font-size:.9rem;display:none;border-left:4px solid}
+.fb.show{display:block}.fb.ok{background:rgba(34,197,94,.12);border-color:var(--ok)}
+.fb.bad{background:rgba(239,68,68,.12);border-color:var(--bad)}
+.btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#06122a;border:none;
+  padding:10px 19px;border-radius:11px;font-weight:700;cursor:pointer;margin-top:14px;transition:.15s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--card2);color:var(--ink);border:1px solid var(--line)}
+.scorepill{background:var(--card2);padding:5px 13px;border-radius:999px;font-weight:700;font-size:.86rem}
+.rescore{font-size:2.6rem;font-weight:800;text-align:center;color:var(--accent);margin:6px 0}
+.review{margin-top:16px}
+.rvi{padding:11px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:var(--card2)}
+.rvi .rq{font-weight:600;margin-bottom:3px;font-size:.9rem}.rvi .ra{font-size:.84rem}
+.ra.ok{color:var(--ok)}.ra.bad{color:var(--bad)}
+.hidden{display:none}
+
+.wcard{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:17px;margin-bottom:13px}
+.wcard h4{font-size:1.05rem;margin-bottom:3px}
+.wcard .concept{color:var(--accent);font-style:italic;font-size:.86rem;margin-bottom:10px}
+.wcard .q{margin:8px 0}
+.wcard .q .t{font-weight:700}.wcard .q .a{color:var(--muted);font-size:.9rem}
+
+.backbtn{background:var(--card2);color:var(--ink);border:1px solid var(--line);
+  padding:8px 15px;border-radius:10px;cursor:pointer;font:inherit;font-size:.88rem;font-weight:600;margin-bottom:8px}
+.backbtn:hover{border-color:var(--accent)}
+
+footer{padding:30px 0;color:var(--muted);font-size:.82rem;text-align:center;border-top:1px solid var(--line)}
+footer b{color:var(--ink)}
+@media(max-width:600px){.cbanner h2,.htitle{font-size:1.4rem}.crumbs{font-size:.78rem}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap topin">
+    <div class="brand" onclick="goHome()"><span class="dot"></span>StudyHub</div>
+    <div class="crumbs" id="crumbs"></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <!-- HOME: daftar mata kuliah -->
+  <div class="view" id="viewHome">
+    <h1 class="htitle">📚 Study Hub</h1>
+    <p class="hsub">Pilih mata kuliah, lalu pilih pertemuan. Materi, peta konsep, tabel, kuis, dan kartu wawancara tersedia per pertemuan.</p>
+    <div class="cgrid" id="courseGrid"></div>
+  </div>
+
+  <!-- COURSE: pilihan pertemuan -->
+  <div class="view" id="viewCourse" hidden>
+    <button class="backbtn" onclick="goHome()">← Kembali ke daftar mata kuliah</button>
+    <div id="courseHead"></div>
+    <h3 style="margin:22px 0 12px;font-size:1.1rem">Pilih pertemuan</h3>
+    <div class="plist" id="ptmList"></div>
+  </div>
+
+  <!-- PERTEMUAN: konten -->
+  <div class="view" id="viewPtm" hidden>
+    <button class="backbtn" onclick="goCourse(cur.course)">← Kembali ke pertemuan</button>
+    <div id="ptmMount"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p id="footSrc"></p>
+    <p style="margin-top:8px">Study Hub · aplikasi belajar per mata kuliah · otomatis dari PPT/slide</p>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   COURSES — struktur per pertemuan
+   {id, title, eyebrow, summary, pertemuan:[
+       {label, sub, cards[], blocks[], table{}, quiz[], wawancara[]} ]}
+   TAMBAH MATA KULIAH = append objek di COURSES.
+   TAMBAH PERTEMUAN  = append objek di pertemuan[].
+   ============================================================ */
+const COURSES=[
+{
+  id:"tdo",
+  title:"TDO — Organizational Design & Strategy",
+  eyebrow:"Week 8 · Organizational Theory & Change Management",
+  summary:"Organisasi strategi adalah rencana tindakan untuk menciptakan nilai. Manajer mengelola hubungan strategy, structure, dan culture pada setiap level.",
+  pertemuan:[
+  {
+    label:"Pertemuan 1", sub:"Konsep & Level Strategi",
+    cards:[
+      {icon:"🧩",h:"Strategy",lvl:"KONSEP",p:"Plan of action untuk menciptakan nilai. Diformulasikan pada empat level oleh manajer di setiap level."},
+      {icon:"🔋",h:"Core Competences",lvl:"SUMBER",p:"Berasal dari Specialized Resources (Functional & Organizational Resources) dan Coordination Abilities."},
+      {icon:"🔗",h:"Value-Creation Cycle",lvl:"PROSES",p:"Dibangun dari kompetensi inti: diciptakan di fungsional, digabung di bisnis, dilindungi di korporasi, dieksploitasi lewat global."},
+      {icon:"🌐",h:"Global Expansion",lvl:"EKSPANSI",p:"Empat cara menciptakan nilai bagi pemangku kepentingan melalui ekspansi global."}
+    ],
+    blocks:[
+      {icon:"🏢",h:"Empat Level Strategi",lvl:"STRUKTUR",items:[
+        "1 · Functional — rendahkan biaya / diferensiasi di tiap fungsi",
+        "2 · Business — Low-cost · Differentiation · Focus",
+        "3 · Corporate — Vertical integration · Related & Unrelated diversification",
+        "4 · Global — Multidomestic · International · Global · Transnational"]},
+      {icon:"💡",h:"Culture = Keunggulan Berkelanjutan",lvl:"INSIGHT",items:[
+        "Pesaing mudah meniru struktur, sangat sulit meniru budaya.",
+        "Budaya yang efektif = sumber keunggulan kompetitif yang tahan lama."]},
+      {icon:"🌍",h:"4 Cara Global Menciptakan Nilai",lvl:"GLOBAL",items:[
+        "Transferring core competences abroad",
+        "Establishing a global network",
+        "Gaining access to global resources & skills",
+        "Using global learning to enhance core competences"]},
+      {icon:"⚙️",h:"Tiga Faktor Penentu Struktur",lvl:"BUSINESS",items:[
+        "Produk lebih beragam → kontrol lebih besar",
+        "Kelompok pelanggan baru → struktur yang melayani",
+        "Pesatnya produk baru → koordinasi antarfungsi"]}
+    ],
+    quiz:[
+      {c:"Definisi",q:"Menurut materi, apa definisi organizational strategy?",o:["Rencana tindakan yang dilakukan organisasi untuk menciptakan nilai","Daftar struktur organisasi dan jabatan karyawan","Anggaran tahunan perusahaan untuk operasional","Prosedur tetap yang tidak berubah"],a:0,x:"Organizational strategy = <b>rencana tindakan</b> untuk menciptakan nilai. Manajer mengelola hubungan strategy, structure, culture."},
+      {c:"4 Level",q:"Yang <b>bukan</b> termasuk empat level strategi adalah…",o:["Functional-level strategy","Business-level strategy","Marketing-level strategy","Global expansion strategy"],a:2,x:"Empat level: <b>Functional, Business, Corporate, Global expansion</b>. Marketing termasuk dalam fungsi, bukan level."},
+      {c:"Culture",q:"Mengapa budaya organisasi menjadi sumber keunggulan kompetitif penting?",o:["Karena mudah ditiru pesaing","Karena struktur meniru budaya lebih mudah","Pesaing mudah meniru struktur, tetapi sangat sulit meniru budaya","Karena budaya tidak berpengaruh pada strategi"],a:2,x:"Struktur mudah ditiru, <b>budaya sangat sulit</b>. Budaya efektif = keunggulan kompetitif berkelanjutan."},
+      {c:"Business",q:"Strategi yang mengkhususkan diri pada satu segmen pasar disebut…",o:["Low-cost strategy","Differentiation strategy","Focus strategy","Diversification strategy"],a:2,x:"<b>Focus strategy</b> = memusatkan seluruh sumber daya pada satu segmen pasar."},
+      {c:"Business",q:"Low-cost business-level strategy berarti organisasi…",o:["Memproduksi barang berkualitas tinggi berharga tinggi","Memproduksi barang/jasa dengan harga rendah","Fokus pada satu segmen tertentu","Mendiversifikasi ke domain baru"],a:1,x:"<b>Low-cost</b> = barang/jasa harga rendah. <b>Diferensiasi</b> = kualitas tinggi, harga tinggi untuk segmen tertentu."},
+      {c:"Business",q:"Tiga faktor yang memengaruhi pilihan struktur organisasi adalah…",o:["Jumlah karyawan, laba, utang","Produk lebih beragam, pelanggan baru, pesatnya produk baru","Lokasi kantor, jumlah cabang, mata uang","Ukuran gudang, jumlah pemasok, volume"],a:1,x:"(1) produk lebih beragam, (2) kelompok pelanggan baru, (3) pesatnya pengembangan produk baru."},
+      {c:"Corporate",q:"Tiga jenis utama corporate-level strategy adalah…",o:["Multidomestic, International, Global","Vertical integration, Related & Unrelated diversification","Low-cost, Differentiation, Focus","Functional, Business, Corporate"],a:1,x:"Corporate: <b>vertical integration, related diversification, unrelated diversification</b>."},
+      {c:"Corporate",q:"Tujuan corporate-level strategy adalah…",o:["Menurunkan biaya operasional harian saja","Menggunakan & mengembangkan kompetensi low-cost/diferensiasi untuk melindungi & memperluas domain","Hanya fokus pada satu segmen","Menghapus seluruh fungsi manufaktur"],a:1,x:"Tujuannya: gunakan & kembangkan kompetensi low-cost/diferensiasi untuk <b>melindungi & memperbesar domain</b>, berekspansi ke domain baru."},
+      {c:"Global",q:"Yang <b>bukan</b> empat cara global expansion menciptakan nilai adalah…",o:["Transferring core competences abroad","Establishing a global network","Mengurangi karyawan secara massal","Using global learning to enhance core competences"],a:2,x:"Empat cara: transfer kompetensi inti, jaringan global, akses sumber daya global, pembelajaran global. Mengurangi karyawan bukan bagian."},
+      {c:"Global",q:"Empat strategi implementasi lintas negara adalah…",o:["Multidomestic, International, Global, Transnational","Low-cost, Differentiation, Focus, Diversification","Functional, Business, Corporate, Global","Vertical, Horizontal, Conglomerate, Merger"],a:0,x:"Empat strategi: <b>Multidomestic, International, Global, Transnational</b>."},
+      {c:"Core Competence",q:"Sumber core competences mencakup…",o:["Hanya laba tahunan","Specialized resources & coordination abilities","Jumlah cabang & aset tetap","Struktur & jabatan direksi"],a:1,x:"Sumber: <b>Specialized Resources</b> (Functional & Organizational) dan <b>Coordination Abilities</b>."}
+    ],
+    wawancara:[
+      {t:"Budaya Sulit Ditiru",c:"Culture as Competitive Advantage",q:[
+        ["Konsep apa yang paling relevan?","Pentingnya culture: pesaing mudah meniru struktur, sangat sulit meniru budaya."],
+        ["Mengapa budaya jadi keunggulan kompetitif?","Budaya efektif sulit ditiru — terbentuk dari nilai & koordinasi jangka panjang."],
+        ["Jika B 'membeli' konsultan untuk meniru budaya A, otomatis tercipta?","Tidak. Budaya tumbuh dari praktik & sejarah, bukan prosedur yang bisa disalin."]]},
+      {t:"Dua Strategi Harga",c:"Business-Level (Low-Cost vs Focus)",q:[
+        ["Konsep apa yang membedakan keduanya?","X = low-cost business-level (murah, pasar luas); Y = focus (satu segmen, seluruh sumber daya)."],
+        ["Apa tujuan business-level strategy?","Menggabungkan kompetensi low-cost & diferensiasi fungsional untuk mengeksploitasi peluang; memilih domain nilai."],
+        ["Jika Y meniru X (jual ke seluruh pasar), risiko apa?","Kehilangan fokus/keunggulan niche; sumber daya terencerkan; bersaing langsung dengan low-cost besar."]]},
+      {t:"Kendaraan Mewah",c:"Differentiation Business-Level",q:[
+        ["Konsep apa yang relevan?","Differentiation business-level strategy: barang berkualitas tinggi, harga premium, segmen tertentu."],
+        ["Apa yang harus konsisten dengannya?","Fungsi pendukung (HRM, R&D, marketing) selaras menciptakan kualitas/prestise."],
+        ["Jika harga dipangkas drastis untuk volume, risiko?","Citra premium rusak, terjebak 'di tengah' — tak unggul sebagai diferensiator maupun low-cost."]]},
+      {t:"Portofolio Melebar",c:"Structure Follows Strategy",q:[
+        ["Faktor apa memengaruhi pilihan struktur?","Produk lebih beragam → butuh kontrol lebih besar atas pengembangan, pemasaran, produksi."],
+        ["Sebutkan tiga faktor penentu struktur.","Produk beragam, kelompok pelanggan baru, pesatnya pengembangan produk baru."],
+        ["Jika produk baru makin pesat, arah penyesuaian struktur?","Meningkatkan koordinasi antarfungsi agar pengembangan cepat & terintegrasi."]]},
+      {t:"Beli Pemasok",c:"Corporate-Level (Vertical Integration)",q:[
+        ["Konsep apa yang relevan?","Vertical integration — bergerak ke hulu (memiliki pemasok) untuk kendalikan pasokan & nilai."],
+        ["Apa tujuan corporate-level strategy?","Gunakan & kembangkan kompetensi untuk melindungi & memperbesar domain, berekspansi ke domain baru."],
+        ["Jika integrasi menambah biaya koordinasi > manfaat, evaluasi apa?","Bandingkan manfaat kontrol vs biaya koordinasi internal; jika lebih besar, mungkin kembali membeli."]]},
+      {t:"Dua Diversifikasi",c:"Related vs Unrelated Diversification",q:[
+        ["Konsep apa yang membedakan?","Related (bidang berkaitan, ada sinergi) vs Unrelated (bidang tak berkaitan)."],
+        ["Struktur apa yang menyertai unrelated diversification?","Conglomerate structure — unit-unit otonom di bawah holding."],
+        ["Mengapa related diversification punya sinergi lebih jelas?","Berbagi kompetensi inti/sumber daya/jaringan; unrelated lebih bergantung pada alokasi modal."]]},
+      {t:"Kompetensi ke Luar Negeri",c:"Global Expansion: Transferring Competences",q:[
+        ["Konsep apa yang relevan?","Transferring core competences abroad — memindahkan kompetensi inti ke luar negeri untuk nilai baru."],
+        ["Sebutkan empat cara global expansion menciptakan nilai.","Transfer kompetensi inti, jaringan global, akses sumber daya global, pembelajaran global."],
+        ["Jika kompetensi tak bisa ditransfer (terikat budaya lokal), alternatif?","Manfaatkan akses sumber daya global atau pembelajaran global dari pasar baru."]]},
+      {t:"Empat Pintu Masuk",c:"Global Implementation Strategies",q:[
+        ["Konsep apa yang relevan?","Empat strategi: Multidomestic, International, Global, Transnational."],
+        ["Apa ide dasar multidomestic?","Menyesuaikan produk/strategi tiap pasar secara otonom (responsif lokal)."],
+        ["Untuk efisien global sekaligus responsif lokal, strategi mana?","Transnational — menggabungkan efisiensi global & responsivitas lokal."]]},
+      {t:"Dari Mana Keunggulan",c:"Sources of Core Competences",q:[
+        ["Konsep apa yang relevan?","Sumber core competences: Specialized Resources (Functional & Organizational) + Coordination Abilities."],
+        ["Hubungannya dengan level strategi?","Kompetensi fungsional → keunggulan bisnis → dilindungi korporasi → dieksploitasi global."],
+        ["Jika sumber daya fisik sama, mengapa kompetensi bisa berbeda?","Karena core competences juga dari cara sumber daya dikoordinasikan, bukan hanya fisik."]]},
+      {t:"Menjaga Keselarasan",c:"Linking Strategy, Structure & Culture",q:[
+        ["Konsep apa intinya?","Menghubungkan strategy, structure, culture pada setiap level untuk menciptakan nilai."],
+        ["Mengapa keselarasan penting?","Strategi bagus gagal jika struktur tidak mendukung eksekusi atau budaya tidak mendukung perilaku."],
+        ["Jika strategi diubah (lokal→global) tapi struktur/budaya tidak, risiko?","Strategi 'macet': struktur & budaya lama tak mendukung operasi & cara kerja global yang baru."]]}
+    ]
+  },
+  {
+    label:"Pertemuan 2", sub:"Strategi Fungsional",
+    cards:[
+      {icon:"🏭",h:"Keunggulan per Fungsi",lvl:"FUNGSIONAL",p:"Setiap fungsi (Manufaktur, HRM, Materials, Sales & Marketing, R&D) dapat menjadi sumber keunggulan biaya atau diferensiasi."},
+      {icon:"🎯",h:"Tujuan Functional Strategy",lvl:"TUJUAN",p:"Menciptakan pada setiap fungsi kompetensi low-cost atau diferensiasi yang memberi keunggulan kompetitif."}
+    ],
+    blocks:[
+      {icon:"📊",h:"Low-Cost vs Differentiation",lvl:"DUA JALUR",items:[
+        "Low-cost = menekan biaya per unit (teknologi fleksibel, efisiensi, relasi jangka panjang).",
+        "Differentiation = keunikan yang dihargai (kualitas, tenaga terampil, targeting segmen, inovasi)."]}
+    ],
+    table:{
+      title:"Keunggulan pada Setiap Fungsi",
+      note:"Setiap fungsi dapat menjadi sumber keunggulan biaya atau diferensiasi.",
+      first:"Fungsi",
+      low:"▸ Low-Cost", diff:"▸ Differentiation",
+      rows:[
+        ["Manufaktur","Teknologi manufaktur fleksibel","Kualitas & keandalan produk"],
+        ["SDM (HRM)","Pengurangan turnover & absensi","Tenaga terampil + pelatihan inovatif"],
+        ["Materials Mgmt","Gudang terkomputerisasi · relasi jangka panjang pemasok","Reputasi perusahaan · relasi jangka panjang"],
+        ["Sales & Marketing","Permintaan naik · biaya produksi turun","Targeting segmen · penyesuaian produk"],
+        ["R&D","Efisiensi teknologi manufaktur","Produk baru · perbaikan produk"]
+      ]
+    },
+    quiz:[
+      {c:"Functional",q:"Sumber keunggulan <b>biaya</b> pada fungsi Manufaktur berasal dari…",o:["Peningkatan kualitas & keandalan produk","Teknologi manufaktur fleksibel","Perekrutan tenaga kerja sangat terampil","Pembuatan produk baru inovatif"],a:1,x:"Manufaktur: <b>low-cost</b> = teknologi manufaktur fleksibel; <b>diferensiasi</b> = kualitas & keandalan produk."},
+      {c:"Functional",q:"Sumber keunggulan <b>diferensiasi</b> pada HRM adalah…",o:["Pengurangan turnover & absensi","Gudang terkomputerisasi","Tenaga kerja sangat terampil + pelatihan inovatif","Peningkatan permintaan"],a:2,x:"HRM: <b>diferensiasi</b> = tenaga terampil + program pelatihan inovatif. Pengurangan turnover = sumber low-cost."},
+      {c:"Functional",q:"Sumber keunggulan <b>biaya</b> pada R&D adalah…",o:["Penciptaan produk baru","Perbaikan produk yang ada","Peningkatan efisiensi teknologi manufaktur","Targeting kelompok pelanggan"],a:2,x:"R&D: <b>low-cost</b> = efisiensi teknologi manufaktur; <b>diferensiasi</b> = produk baru & perbaikan produk."},
+      {c:"Materials",q:"Sumber keunggulan <b>diferensiasi</b> pada Materials Management adalah…",o:["Gudang terkomputerisasi","Hubungan jangka panjang dengan pemasok","Reputasi perusahaan & hubungan jangka panjang","Pengurangan biaya logistik"],a:2,x:"Materials: <b>low-cost</b> = gudang terkomputerisasi & relasi jangka panjang; <b>diferensiasi</b> = reputasi & relasi jangka panjang."},
+      {c:"Marketing",q:"Sumber keunggulan <b>diferensiasi</b> pada Sales & Marketing adalah…",o:["Peningkatan permintaan & biaya produksi turun","Targeting kelompok pelanggan & penyesuaian produk","Pengurangan biaya iklan","Peningkatan volume produksi massal"],a:1,x:"Sales & Marketing: <b>diferensiasi</b> = targeting segmen & penyesuaian produk (tailoring)."},
+      {c:"Tujuan",q:"Tujuan akhir functional-level strategy adalah…",o:["Menciptakan kompetensi low-cost atau diferensiasi di tiap fungsi yang memberi keunggulan kompetitif","Menggabungkan semua fungsi jadi satu departemen","Menghapus seluruh fungsi pendukung","Hanya menekan biaya tanpa kualitas"],a:0,x:"Tujuannya: ciptakan pada <b>setiap fungsi</b> kompetensi low-cost atau diferensiasi yang memberi keunggulan kompetitif."}
+    ],
+    wawancara:[
+      {t:"Pabrik Komponen",c:"Functional-Level Strategy (Manufacturing: Low-Cost)",q:[
+        ["Konsep apa yang relevan?","Functional-level strategy — sumber low-cost advantage di Manufaktur: pengembangan teknologi manufaktur fleksibel."],
+        ["Mengapa fleksibilitas produksi bisa jadi keunggulan biaya?","Memungkinkan satu lini melayani banyak varian tanpa biaya terpisah → menekan biaya per unit."],
+        ["Jika pesaing meniru teknologinya, apakah keunggulan biaya bertahan?","Tidak tahan lama — struktur/teknologi mudah ditiru. Perlu dilengkapi budaya/koordinasi yang sulit ditiru."]]},
+      {t:"Restoran Premium",c:"Differentiation (HRM)",q:[
+        ["Konsep apa yang relevan?","Differentiation advantage pada HRM: tenaga kerja sangat terampil + program pelatihan inovatif."],
+        ["Bagaimana HRM menciptakan diferensiasi?","Kualitas SDM & pelatihan membuat pengalaman pelanggan unik, tak mudah ditiru restoran harga murah."],
+        ["Jika ingin menekan biaya, sumber low-cost HRM apa yang cocok?","Pengurangan turnover & absensi (menekan biaya rekrutmen/pelatihan ulang)."]]},
+      {t:"Efisiensi vs Inovasi R&D",c:"Functional Strategy (R&D)",q:[
+        ["Konsep apa yang relevan?","Functional-level strategy pada R&D: low-cost (efisiensi) vs diferensiasi (inovasi)."],
+        ["Bedakan sumber low-cost & diferensiasi R&D.","Low-cost = efisiensi teknologi manufaktur; diferensiasi = produk baru & perbaikan produk."],
+        ["Jika pasar lebih hargai inovasi, prioritas apa?","Diferensiasi — lebih selaras dengan apa yang dihargai pelanggan."]]},
+      {t:"Relasi dengan Pemasok",c:"Functional Strategy (Materials Management)",q:[
+        ["Konsep apa yang relevan?","Functional-level strategy pada Materials Management: low-cost & diferensiasi."],
+        ["Bedakan sumber low-cost & diferensiasi.","Low-cost = gudang terkomputerisasi & relasi jangka panjang; diferensiasi = reputasi & relasi jangka panjang."],
+        ["Jika terlalu bergantung pada satu pemasok, risiko?","Efisiensi & kepercayaan vs kerentanan pasokan — perlu keseimbangan."]]},
+      {t:"Menyesuaikan Produk",c:"Functional Strategy (Sales & Marketing)",q:[
+        ["Konsep apa yang relevan?","Functional-level strategy pada Sales & Marketing."],
+        ["Bedakan sumber low-cost & diferensiasi.","Low-cost = permintaan naik & biaya produksi turun; diferensiasi = targeting segmen & tailoring produk."],
+        ["Jika tailoring menaikkan biaya besar-besaran, ketegangan apa?","Diferensiasi vs low-cost — perlu pilih fokus atau cara menyalakan diferensiasi tanpa biaya berlebihan."]]}
+    ]
+  }
+  ]
+},
+{
+  id:"manajemen-proyek",
+  title:"Manajemen Proyek",
+  eyebrow:"Manajemen Bisnis · Pinto, PM: Achieving Competitive Advantage, 6th ed.",
+  summary:"Fondasi manajemen proyek: proyek vs proses, definisi PMI, siklus hidup, dan kriteria sukses. Bab 2 membahas konteks organisasi — strategi, struktur, budaya, dan stakeholder.",
+  pertemuan:[
+  {
+    label:"Pertemuan 1", sub:"Bab 1 · Fondasi Manajemen Proyek",
+    cards:[
+      {icon:"⚖️",h:"Proyek vs Proses",lvl:"FONDASI",p:"Proyek = temporary & unique (sekali jalan, hasil baru). Proses = repetitif & berkelanjutan. Ini fondasi seluruh mata kuliah."},
+      {icon:"📐",h:"Definisi PMI",lvl:"KONSEP",p:"A temporary endeavor to create a unique product, service, or result. Dua kata kunci: TEMPORARY (ada awal & akhir) + UNIQUE (bukan pengulangan)."},
+      {icon:"🔄",h:"Siklus Hidup Proyek",lvl:"TAHAP",p:"Empat tahap: Conceptualization → Planning → Execution → Termination. Porsi anggaran terbesar (man-hours) terserap di fase execution."},
+      {icon:"🎯",h:"Kriteria Sukses",lvl:"UKURAN",p:"Bertambah dari Triple (waktu · anggaran · performance) ke Quadruple constraint (+ client acceptance)."}
+    ],
+    table:{
+      title:"Proses vs Proyek",
+      note:"Proses dan proyek berjalan dengan logika yang berbeda — proyek sulit justru karena melanggar praktik yang sudah mapan.",
+      first:"Aspek",
+      low:"▸ Proses", diff:"▸ Proyek",
+      rows:[
+        ["Produk","Berulang (produk/proses yang sama)","Baru (produk/proses baru)"],
+        ["Tujuan","Banyak tujuan sekaligus","Satu tujuan"],
+        ["Durasi","Berkelanjutan","Sekali jalan, umur terbatas"],
+        ["Anggota tim","Relatif homogen","Lebih heterogen"],
+        ["Biaya & jadwal","Kepastian lebih tinggi","Ketidakpastian lebih tinggi"],
+        ["Dampak","Menopang status quo","Mengganggu status quo"]
+      ]
+    },
+    blocks:[
+      {icon:"5️⃣",h:"Lima Elemen Definisi Proyek",lvl:"PMI",items:[
+        "1 · Kompleks dan sekali jalan",
+        "2 · Dibatasi anggaran, jadwal, dan sumber daya",
+        "3 · Punya tujuan yang jelas",
+        "4 · Berorientasi pelanggan",
+        "5 · Lintas fungsi dalam organisasi"]},
+      {icon:"💨",h:"Lima Tekanan (Cleland)",lvl:"MENDESAK",items:[
+        "Siklus hidup produk memendek",
+        "Jendela peluncuran sempit — telat sedikit jadi kelas dua",
+        "Produk makin kompleks, tuntutan teknis naik",
+        "Pasar global — pesaing & pelanggan baru sekaligus",
+        "Inflasi rendah — laba dicari dari efisiensi"]},
+      {icon:"📈",h:"Kurva Lima Variabel",lvl:"DINAMIKA",items:[
+        "Uncertainty — tertinggi di awal proyek",
+        "Creativity — tinggi di awal, turun setelah tujuan mengeras",
+        "Resources — naik terus seiring komitmen dana",
+        "Project stake — naik terus (makin lama makin besar investasi)",
+        "Client interest — kurva U (antusias → turun → naik di serah terima)"]},
+      {icon:"🏆",h:"Triple → Quadruple Constraint",lvl:"KRITERIA",items:[
+        "Triple: waktu · anggaran · performance",
+        "Quadruple: tambah client acceptance",
+        "Kasus klinik: triple 'sukses' tapi quadruple 'gagal' — 12/300 pasien yang pakai",
+        "Kesimpulan: doing the wrong things well"]},
+      {icon:"📊",h:"Studi KPMG",lvl:"ANGKA",items:[
+        "65% proyek software & hardware gagal (300+ perusahaan besar)",
+        "1 dari 2 manajer menganggap kegagalan itu normal",
+        "> 1/3 biaya rekonstruksi Afghanistan hilang (pemborosan & perencanaan buruk) — SIGAR"]}
+    ],
+    quiz:[
+      {c:"Definisi PMI",q:"Menurut PMI, proyek adalah…",o:["A temporary endeavor to create a unique product, service, or result","Proses operasional berulang yang berkelanjutan","Kegiatan rutin harian organisasi","Rencana anggaran perusahaan tahunan"],a:0,x:"Definisi PMI: <b>sebuah usaha temporary</b> untuk menciptakan produk/jasa/hasil yang <b>unik</b>. Dua kata kunci: temporary + unique."},
+      {c:"Temporary & Unique",q:"Dua kata kunci dalam definisi proyek menurut PMI adalah…",o:["Efficient & effective","Temporary & unique","Complex & costly","Global & local"],a:1,x:"<b>Temporary</b> (ada titik awal & akhir) + <b>unique</b> (bukan pengulangan). Sisanya turunan dari dua kata kunci ini."},
+      {c:"5 Elemen",q:"Yang <b>bukan</b> termasuk lima elemen definisi proyek adalah…",o:["Kompleks dan sekali jalan","Dibatasi anggaran, jadwal, sumber daya","Bersifat repetitif dan berkelanjutan","Lintas fungsi dalam organisasi"],a:2,x:"Lima elemen: kompleks sekali jalan, dibatasi anggaran/jadwal/sumber daya, tujuan jelas, berorientasi pelanggan, lintas fungsi. <b>Repetitif & berkelanjutan = proses, bukan proyek.</b>"},
+      {c:"Proyek vs Proses",q:"Manakah di bawah ini yang termasuk PROSES, bukan proyek?",o:["Migrasi sistem akademik kampus ke platform baru","Menyusun laporan keuangan bulanan","Menyiapkan audit ISO pertama perusahaan","Membuka gerai ke-51 sebuah jaringan"],a:1,x:"Laporan keuangan bulanan = <b>proses</b> (siklus berulang). Migrasi sistem, audit pertama, buka gerai baru = <b>proyek</b> (sekali jalan, unik)."},
+      {c:"Tabel",q:"Salah satu perbedaan proses dan proyek adalah proses bersifat…",o:["Sekali jalan","Berkelanjutan","Mengganggu status quo","Anggota tim heterogen"],a:1,x:"Proses: berulang, banyak tujuan, <b>berkelanjutan</b>, anggota homogen, menopang status quo. Proyek: baru, satu tujuan, sekali jalan, mengganggu status quo."},
+      {c:"Tekanan Cleland",q:"Yang <b>bukan</b> termasuk lima tekanan yang mendorong organisasi ke arah proyek adalah…",o:["Siklus hidup produk memendek","Jendela peluncuran yang sempit","Produk makin sederhana dan murah","Pasar global"],a:2,x:"Lima tekanan Cleland: siklus hidup memendek, jendela peluncuran sempit, <b>produk makin kompleks</b> (bukan sederhana), pasar global, inflasi rendah."},
+      {c:"Studi KPMG",q:"Menurut studi KPMG atas 300+ perusahaan besar, berapa persen proyek software & hardware yang gagal?",o:["25%","45%","65%","90%"],a:2,x:"<b>65%</b> proyek software & hardware gagal; 1 dari 2 manajer menganggap itu normal; >1/3 biaya rekonstruksi Afghanistan hilang (SIGAR)."},
+      {c:"Siklus Hidup",q:"Urutan empat tahap siklus hidup proyek yang benar adalah…",o:["Planning, Execution, Conceptualization, Termination","Conceptualization, Planning, Execution, Termination","Execution, Planning, Termination, Conceptualization","Conceptualization, Execution, Planning, Termination"],a:1,x:"<b>Conceptualization → Planning → Execution → Termination</b>."},
+      {c:"Fase Terbesar",q:"Porsi anggaran terbesar (dalam man-hours) umumnya terserap di fase…",o:["Conceptualization","Planning","Execution","Termination"],a:2,x:"Fase <b>execution</b> menyerap porsi anggaran/man-hours terbesar — pekerjaan sesungguhnya berlangsung di sini."},
+      {c:"Kurva",q:"Pada kurva siklus hidup proyek, tingkat uncertainty (ketidakpastian) paling tinggi di…",o:["Akhir proyek","Awal proyek","Fase execution","Setelah serah terima"],a:1,x:"<b>Uncertainty tertinggi di awal</b> karena tantangan belum teridentifikasi. Creativity juga tinggi di awal lalu turun setelah tujuan mengeras."},
+      {c:"Kurva Client",q:"Bentuk kurva client interest sepanjang proyek adalah…",o:["Naik terus","Turun terus","Kurva U","Tetap datar"],a:2,x:"<b>Kurva U</b>: antusias di awal → turun saat pengerjaan → naik lagi mendekati serah terima. Pelanggan yang menghilang lalu muncul di akhir = sumber kejutan penolakan."},
+      {c:"Triple",q:"Triple constraint terdiri dari…",o:["Waktu, anggaran, performance","Efisiensi, dampak, bisnis, kesiapan","Visi, misi, dan strategi","Stakeholder internal, eksternal, intervenor"],a:0,x:"<b>Triple constraint = waktu · anggaran · performance.</b> Quadruple menambah client acceptance."},
+      {c:"Quadruple",q:"Quadruple constraint menambahkan elemen…",o:["Client acceptance","Manajemen risiko proyek","Sumber daya manusia","Teknologi informasi"],a:0,x:"Quadruple constraint = triple + <b>client acceptance</b>."},
+      {c:"Kasus Klinik",q:"Kasus klinik antrean digital dinilai 'sukses' oleh triple constraint tapi 'gagal' oleh quadruple constraint karena…",o:["Melebihi anggaran yang ditetapkan","Tidak tepat waktu diselesaikan","Client acceptance tidak terpenuhi (12/300 pasien yang pakai)","Spesifikasi awal tidak lengkap"],a:2,x:"Triple: tepat waktu, under budget, sesuai spesifikasi = sukses. Quadruple: <b>client acceptance gagal</b> — cuma 12/300 pasien pakai. Doing the wrong things well."}
+    ],
+    wawancara:[
+      {t:"Gerai Kopi ke-51",c:"Proyek vs Proses",q:[
+        ["Konsep apa yang relevan?","Proyek vs proses: buka gerai ke-51 = proyek (unik di lokasi & perizinan); seduh kopi harian = proses (repetitif)."],
+        ["Mengapa buka gerai baru proyek tapi buka kopi harian bukan?","Gerai baru sekali jalan, punya awal & akhir, lintas fungsi; seduh kopi berulang tiap hari tanpa titik akhir."],
+        ["Jika buka gerai ke-51 ternyata repetitif tiap minggu tanpa akhir, apakah masih proyek?","Tidak lagi — menjadi proses rutin. Proyek harus temporary & unique."]]},
+      {t:"Kasus Klinik Antrean",c:"Triple vs Quadruple Constraint",q:[
+        ["Konsep apa yang relevan?","Triple constraint (waktu · anggaran · performance) vs quadruple (+ client acceptance)."],
+        ["Nilai proyek klinik dengan triple dan quadruple constraint?","Triple: sukses (tepat waktu, under budget, sesuai spesifikasi). Quadruple: gagal (client acceptance — 12/300 pasien pakai)."],
+        ["Mengapa kedua penilaian bisa berbeda?","Triple hanya ukur efisiensi internal vs spesifikasi awal; spesifikasi awal bisa keliru — doing the wrong things well."]]},
+      {t:"Bus Wisata (McKain)",c:"Kriteria Sukses & Tanya Dulu",q:[
+        ["Konsep apa yang relevan?","Proyek sempurna bisa tetap salah proyek — tanyakan kebutuhan sebelum mulai."],
+        ["Apa pelajaran dari kasus renovasi interior bus wisata?","Faktor terpenting ternyata sopir, bukan interior. Proyek renovasi dibatalkan, diganti program pelatihan sopir."],
+        ["Bagaimana memastikan kriteria sukses ditetapkan dengan benar?","Riset kebutuhan pemangku kepentingan di awal; kriteria ditetapkan sebelum proyek — what gets measured gets managed."]]}
+    ]
+  },
+  {
+    label:"Pertemuan 2", sub:"Bab 2 · Konteks Organisasi",
+    cards:[
+      {icon:"🪜",h:"Strategi = Batu Loncatan",lvl:"STRATEGI",p:"Strategi hanya bisa mengartikulasikan; proyek yang mewujudkan. Proyek adalah batu loncatan strategi."},
+      {icon:"🏛️",h:"Tiga Struktur Organisasi",lvl:"STRUKTUR",p:"Functional (jelas, efisien), Project (fokus, tapi boros sumber daya), Matrix (dua bos, fleksibel tapi banyak negosiasi)."},
+      {icon:"🌐",h:"Budaya & Aturan Tak Tertulis",lvl:"BUDAYA",p:"Norma tak tertulis yang memandu perilaku. Tujuh faktor pembentuk: lingkungan, lokasi, teknologi, sistem imbalan, aturan/prosedur, tokoh kunci, critical incidents."},
+      {icon:"👥",h:"Stakeholder & Intervenors",lvl:"PEMANGKU","p":"Semua pihak yang kepentingannya harus diseimbangkan. Intervenor groups (lingkungan/politik/sosial) bisa menyela proyek."}
+    ],
+    blocks:[
+      {icon:"🏛️",h:"Konteks Organisasi",lvl:"STRATEGI·STRUKTUR·BUDAYA",items:[
+        "Strategi: proyek mewujudkan apa yang strategi hanya bisa ucapkan",
+        "Struktur: fungsional, proyek, atau matriks — masing-masing punya harga",
+        "Budaya: aturan tak tertulis yang menentukan perilaku sebenarnya",
+        "Stakeholder: semua pihak yang kepentingannya harus diseimbangkan"]},
+      {icon:"🧭",h:"TOWS & PMO",lvl:"ALAT",items:[
+        "TOWS: SO (maxi-maxi), ST (maxi-mini), WO (mini-maxi), WT (mini-mini) → turunkan proyek konkret",
+        "Spektrum matriks: weak → balanced → strong → heavyweight",
+        "PMO: weather station (pengamat), control tower (penjaga mutu), resource pool (penyedia orang)"]},
+      {icon:"🌊",h:"Escalation of Commitment",lvl:"JERATAN",items:[
+        "Organisasi terus mendanai proyek yang jelas gagal karena tak sanggup mengakui kegagalan",
+        "Contoh nyata: Airbus A380 dan Bandara Kertajati"]}
+    ],
+    quiz:[
+      {c:"Strategi",q:"Dalam konteks organisasi (Bab 2), proyek berfungsi sebagai…",o:["Akhir dari sebuah strategi","Batu loncatan / wujud nyata strategi","Pengganti struktur organisasi","Penghalang inovasi"],a:1,x:"<b>Proyek adalah batu loncatan strategi</b>: strategi hanya bisa mengartikulasikan, proyek yang mewujudkan."},
+      {c:"Stakeholder",q:"Kelompok eksternal yang punya kemampuan menyela proyek dan memaksa kepentingannya masuk disebut…",o:["Top management","Manajer fungsional","Intervenor groups","Anggota tim proyek"],a:2,x:"<b>Intervenor groups</b> = kelompok lingkungan/politik/sosial/komunitas yang bisa menyela proyek. Contoh: Cape Wind dibatalkan setelah 14 tahun litigasi."},
+      {c:"Struktur",q:"Struktur organisasi yang memberi anggota tim 'dua bos' adalah…",o:["Functional","Project","Matrix","Heavyweight"],a:2,x:"<b>Matrix</b> = dua bos (manajer fungsional & manajer proyek). Cocok lingkungan dinamis, tapi waktu habis untuk negosiasi."},
+      {c:"PMO",q:"PMO yang hanya memantau dan melaporkan status proyek tanpa berusaha mengendalikannya disebut…",o:["Control tower","Resource pool","Weather station","Directive office"],a:2,x:"<b>Weather station</b> = peran pengamat (memantau & melaporkan). Control tower = penjaga mutu; resource pool = penyedia orang."},
+      {c:"Budaya",q:"Budaya organisasi didefinisikan sebagai…",o:["Aturan tertulis resmi perusahaan","Aturan/norma tak tertulis yang memandu perilaku","Struktur hierarki jabatan formal","Kebijakan gaji dan tunjangan"],a:1,x:"Budaya = <b>aturan/norma tak tertulis</b> yang membentuk & memandu perilaku. Tujuh faktor pembentuk: lingkungan, lokasi, teknologi, sistem imbalan, aturan/prosedur, tokoh kunci, critical incidents."},
+      {c:"Escalation",q:"Kecenderungan organisasi terus mendanai proyek yang jelas gagal karena tak sanggup mengakui kegagalan disebut…",o:["Triple constraint","Escalation of commitment","Client acceptance","Project termination"],a:1,x:"<b>Escalation of commitment</b> = terus mendanai proyek gagal melewati titik objektif penghentian. Contoh: A380 dan Kertajati."}
+    ],
+    wawancara:[
+      {t:"Airbus A380 vs Boeing 787",c:"Strategi → Proyek",q:[
+        ["Konsep apa yang relevan?","Proyek adalah batu loncatan strategi; strategi menentukan proyek yang lahir (Tabel 2.1)."],
+        ["Apa perbedaan keyakinan strategi Airbus dan Boeing?","Airbus: masa depan megacity & hub → pesawat raksasa (A380). Boeing: penerbangan langsung antar kota menengah → pesawat efisien (787)."],
+        ["Kegagalan proyek atau kegagalan strategi?","Pertanyaan kunci: jika strategi salah memetakan masa depan, proyek yang dieksekusi sempurna pun bisa gagal."]]},
+      {t:"Bandara Kertajati",c:"Stakeholder & Benturan Kepentingan",q:[
+        ["Konsep apa yang relevan?","Stakeholder internal/eksternal dan benturan kepentingan; analisis permintaan & akses di fase awal."],
+        ["Sebutkan dua pasang stakeholder yang tujuannya bertabrakan.","Maskapai (mau rute menguntungkan) vs bandara (mau isi kapasitas); subsidi operasional vs kebutuhan anggaran daerah."],
+        ["Pada fase siklus hidup mana analisis permintaan & akses harus dilakukan?","Fase conceptualization/planning — bukan setelah konstruksi selesai (jaga agar tidak escalation of commitment)."]]},
+      {t:"Dua Bos",c:"Struktur Matriks",q:[
+        ["Konsep apa yang relevan?","Struktur matriks: anggota punya dua bos (fungsional & proyek); cocok lingkungan dinamis tapi waktu habis untuk negosiasi."],
+        ["Apa kelebihan dan kekurangan struktur matriks?","Kelebihan: koordinasi lintas fungsi, sumber daya terbagi, responsif. Kekurangan: dua bos, anggota terjepit, waktu untuk negosiasi."],
+        ["Jika negosiasi antardua bos makin boros waktu, ke struktur mana sebaiknya bergeser?","Menuju projectized (otoritas penuh di manajer proyek) atau kembali ke functional, tergantung kebutuhan."]]},
+      {t:"Estimasi Dipotong 20%",c:"Budaya & Escalation of Commitment",q:[
+        ["Konsep apa yang relevan?","Budaya = aturan tak tertulis; estimasi yang dipadatkan & escalation of commitment."],
+        ["Apa dampak budaya 'semua estimasi otomatis dipotong 20%'?","Informasi jadi tidak jujur, perencanaan rusak, kabar buruk tak sampai ke pengambil keputusan — seperti Boeing's Fatal Flaw."],
+        ["Apa yang harus berubah agar kabar buruk bisa naik lebih cepat?","Sistem imbalan & norma yang menghargai estimasi jujur; mekanisme escalation berbasis penilaian objektif."]]}
+    ]
+  }
+  ]
+},
+{
+  id:"ekonomi-perilaku",
+  title:"Ekonomi Perilaku",
+  eyebrow:"Ekonomi Perilaku / Pengambilan Keputusan",
+  summary:"Bias kognitif yang memengaruhi keputusan: framing effect, mental accounting, sunk cost fallacy, anchoring, loss aversion, dan bias tambahan lainnya.",
+  pertemuan:[
+  {
+    label:"Pertemuan 1", sub:"Bias Utama",
+    cards:[
+      {icon:"🖼️",h:"Framing Effect",lvl:"BIAS",p:"Cara menyajikan informasi (bingkai rugi vs cuan) mengubah pilihan, meski isi numeriknya sama."},
+      {icon:"💰",h:"Mental Accounting",lvl:"BIAS",p:"Uang dipilah ke 'rekening' psikologis; orang memperlakukan uang seolah tidak fungible meski secara ekonomi setara."},
+      {icon:"⏳",h:"Sunk Cost Fallacy",lvl:"BIAS",p:"Terus melanjutkan karena biaya yang sudah dikeluarkan, meski secara rasional seharusnya berhenti."},
+      {icon:"⚓",h:"Anchoring & Loss Aversion",lvl:"BIAS",p:"Tergantung pada angka pertama (anchor); kerugian terasa sekitar 2x lebih menyakitkan dibanding keuntungan setara."}
+    ],
+    blocks:[
+      {icon:"🖼️",h:"Framing Effect",lvl:"KONSEP",items:[
+        "Rangka 'rugi' vs 'cuan' mengubah preferensi risiko",
+        "Gain → risk-averse; Loss → risk-seeking (prospect theory)"]},
+      {icon:"💰",h:"Mental Accounting",lvl:"KONSEP",items:[
+        "Uang punya 'label' (uang makan vs uang hadiah)",
+        "Memicu pemborosan di satu rekening, hemat di rekening lain"]},
+      {icon:"⏳",h:"Sunk Cost Fallacy",lvl:"KONSEP",items:[
+        "Biaya yang sudah keluar memengaruhi keputusan ke depan",
+        "Rasional: abaikan sunk cost, lihat manfaat marginal ke depan"]},
+      {icon:"⚓",h:"Anchoring & Loss Aversion",lvl:"KONSEP",items:[
+        "Anchor: estimasi/angka pertama mengunci penilaian berikutnya",
+        "Loss aversion: rasa sakit rugi ≈ 2x rasa senang cuan setara"]}
+    ],
+    quiz:[
+      {c:"Framing",q:"Framing effect adalah…",o:["Kecenderungan memilih opsi berdasarkan cara penyajian informasi","Kesalahan menghitung probabilitas","Ketergantungan pada angka pertama","Ketidakmampuan mengingat masa lalu"],a:0,x:"<b>Framing</b> = cara menyajikan (bingkai) informasi mengubah pilihan, meski isi numeriknya sama."},
+      {c:"Framing Gain",q:"Menurut prospect theory, ketika sebuah pilihan dibingkai sebagai gain (cuan), orang cenderung…",o:["Risk-seeking (mencari risiko)","Risk-averse (menghindari risiko)","Netral terhadap risiko","Impulsif"],a:1,x:"Gain → <b>risk-averse</b>; Loss → risk-seeking. Bingkai berbeda → preferensi risiko berlawanan."},
+      {c:"Mental Accounting",q:"Mental accounting menjelaskan bahwa orang…",o:["Menganggap semua uang setara dan fungible","Memperlakukan uang sebagai bagian dari 'rekening' psikologis terpisah","Selalu memaksimalkan utilitas ekonomi","Mengabaikan pajak sepenuhnya"],a:1,x:"<b>Mental accounting</b> = uang dipilah ke kategori psikologis; diperlakukan tidak fungible meski setara."},
+      {c:"Sunk Cost",q:"Sunk cost fallacy terjadi ketika…",o:["Seseorang terus melanjutkan karena biaya yang sudah dikeluarkan","Seseorang mengabaikan seluruh biaya","Seseorang selalu memilih opsi termurah","Seseorang menghitung opportunity cost"],a:0,x:"<b>Sunk cost fallacy</b> = keputusan dipengaruhi biaya tak dapat dikembalikan. Rasional: abaikan sunk cost, lihat manfaat ke depan."},
+      {c:"Sunk Cost Contoh",q:"Manakah yang merupakan contoh sunk cost fallacy?",o:["Tetap nonton film buruk sampai selesai karena sudah beli tiket","Memilih restoran yang lebih murah","Menghitung biaya peluang dengan cermat","Menyimpan uang di rekening terpisah"],a:0,x:"Nonton film buruk karena <b>sudah beli tiket</b> (biaya tak kembali) adalah contoh klasik sunk cost fallacy."},
+      {c:"Anchoring",q:"Anchoring adalah…",o:["Ketergantungan berlebihan pada angka/estimasi pertama","Ketakutan terhadap kerugian","Pembagian uang ke kategori mental","Bingkai informasi agar terlihat menarik"],a:0,x:"<b>Anchoring</b> = penilaian tertambat pada angka/estimasi pertama yang muncul."},
+      {c:"Loss Aversion",q:"Loss aversion berarti…",o:["Rasa sakit karena kerugian jauh lebih besar daripada rasa senang karena keuntungan setara","Orang selalu menghindari semua risiko","Orang menyukai kerugian","Uang bersifat tidak fungible"],a:0,x:"<b>Loss aversion</b>: rasa sakit rugi ≈ <b>2x</b> rasa senang cuan setara."},
+      {c:"Rasio",q:"Secara umum, kerugian dirasakan sekitar…",o:["Sama besarnya dengan keuntungan","Setengah dari keuntungan","Sekitar 2x lebih kuat daripada keuntungan setara","10x lebih kuat"],a:2,x:"Estimasi umum: <b>rugi terasa ~2x</b> lebih menyakitkan dibanding cuan setara."},
+      {c:"Aplikasi",q:"Seorang manajer terus mendanai proyek yang jelas gagal hanya karena sudah mengeluarkan banyak dana. Ini contoh…",o:["Framing effect","Anchoring","Sunk cost fallacy","Mental accounting"],a:2,x:"Meneruskan karena <b>biaya yang sudah keluar</b> = sunk cost fallacy."},
+      {c:"Aplikasi Framing",q:"Proyek disebut '80% peluang sukses' vs '20% peluang gagal' memberi kesan berbeda meski nilainya sama. Ini contoh…",o:["Framing effect","Mental accounting","Sunk cost fallacy","Escalation of commitment"],a:0,x:"<b>Framing</b>: 80% sukses (cuan) vs 20% gagal (rugi) — kesan & pilihan berbeda meski numeriknya identik."},
+      {c:"Aplikasi Anchoring",q:"Dalam negosiasi, angka pertama Rp500 juta membuat tawar berikutnya cenderung berkisar di sekitarnya. Ini…",o:["Framing effect","Mental accounting","Sunk cost fallacy","Escalation of commitment"],a:1,x:"<b>Anchoring</b>: angka pertama (Rp500 juta) menjadi jangkar penilaian tawar-menawar berikutnya."},
+      {c:"Mitigasi",q:"Cara paling tepat mengurangi bias dalam pengambilan keputusan adalah…",o:["Sengaja berpatokan pada angka pertama","Mengabaikan semua data yang ada","Evaluasi ulang dengan manfaat marginal ke depan, abaikan sunk cost","Selalu ikuti emosi saat itu"],a:2,x:"Abaikan <b>sunk cost</b>, evaluasi <b>manfaat marginal ke depan</b>; untuk anchoring, kumpulkan data independen sebelum terpapar angka pertama."}
+    ],
+    wawancara:[
+      {t:"Rumah Impian",c:"Framing Effect",q:[
+        ["Konsep apa yang paling relevan?","Framing effect: bingkai 'rugi' vs 'cuan' mengubah pilihan, meski nilai uang sama."],
+        ["Jelaskan mengapa Q1 dan Q2 menghasilkan keputusan berbeda.","Q1 (cuan) membuat orang risk-averse; Q2 (rugi) membuat orang risk-seeking. Bingkai berbeda → preferensi risiko berbeda."],
+        ["Jika Anda manajer, bagaimana menyajikan info agar tim tidak terjebak bingkai?","Sajikan kedua bingkai (cuan & rugi) secara bersamaan dengan angka yang sama agar keputusan berbasis nilai, bukan bingkai."]]},
+      {t:"Dana Liburan vs Belanja",c:"Mental Accounting",q:[
+        ["Konsep apa yang relevan?","Mental accounting: uang dipilah ke 'rekening' psikologis dan diperlakukan tidak fungible."],
+        ["Mengapa uang bonus dan uang gaji sering diperlakukan berbeda?","Keduanya setara secara ekonomi, tapi bonus masuk 'rekening hiburan' sehingga lebih mudah dibelanjakan."],
+        ["Jika mental accounting dihapus, apakah orang akan selalu alokasikan uang secara rasional?","Tidak otomatis — sistem 1 tetap memberi 'label' pada uang; desain anggaran eksplisit membantu, bukan menghapus bias."]]},
+      {t:"Nonton Film Buruk",c:"Sunk Cost Fallacy",q:[
+        ["Konsep apa yang paling relevan?","Sunk cost fallacy: biaya tak dapat dikembalikan (tiket) memengaruhi keputusan melanjutkan."],
+        ["Mengapa orang tetap menyelesaikan hal yang sudah tidak menyenangkan?","Merasakan berhenti = 'membuang' biaya yang sudah dikeluarkan, meski biaya itu sudah hilang apa pun keputusannya."],
+        ["Jika biaya tiket bisa dikembalikan 100%, apakah orang masih tetap nonton?","Banyak yang akan pergi — membuktikan keputusan dipandu sunk cost, bukan kesenangan saat ini."]]},
+      {t:"Harga Coret",c:"Anchoring Effect",q:[
+        ["Konsep apa yang relevan?","Anchoring: angka pertama (harga coret) menjadi jangkar penilaian nilai."],
+        ["Jelaskan peran angka Rp500.000 dalam keputusan pembeli.","Angka itu mengunci persepsi 'mahal', sehingga Rp350.000 terasa seperti diskon besar meski nilai sebenarnya bisa berbeda."],
+        ["Jika harga coret dihapus, apakah persepsi nilai akan objektif?","Tidak sepenuhnya — tanpa jangkar, pembeli memakai referensi internal yang juga bias."]]},
+      {t:"Rugi vs Cuan",c:"Loss Aversion",q:[
+        ["Konsep apa yang paling relevan?","Loss aversion: kerugian terasa sekitar 2x lebih menyakitkan dibanding keuntungan setara."],
+        ["Mengapa orang lebih sulit melepas kerugian daripada meraih keuntungan?","Sistem evaluatif memberi bobot emosional lebih besar pada perubahan negatif daripada positif."],
+        ["Jika rasa rugi dan rasa senang sama kuatnya, apakah keputusan menjadi netral?","Bisa lebih netral, tapi bias lain (status quo, endowment) tetap mendorong pilihan."]]},
+      {t:"Status Quo",c:"Status Quo Bias",q:[
+        ["Konsep apa yang relevan?","Status quo bias: kecenderungan mempertahankan keadaan saat ini meski ada alternatif lebih baik."],
+        ["Mengapa orang enggan berpindah dari opsi yang sudah dikenal?","Berpindah dirasakan sebagai potensi kerugian dan menuntut usaha kognitif."],
+        ["Jika tidak ada biaya untuk berpindah, apakah status quo bias hilang?","Tidak sepenuhnya — inersia dan preferensi implisit tetap menahan perubahan."]]},
+      {t:"Efek Endowment",c:"Endowment Effect",q:[
+        ["Konsep apa yang paling relevan?","Endowment effect: orang menilai barang yang dimiliki lebih tinggi daripada saat belum memiliki."],
+        ["Mengapa pemilik meminta harga jual lebih tinggi dari harga beli?","Memiliki meningkatkan nilai subjektif; melepas dirasakan sebagai kerugian."],
+        ["Jika barang belum dimiliki, apakah kesenjangan harga jual-beli tetap ada?","Bias berkurang tajam — kesenjangan muncul karena efek kepemilikan."]]},
+      {t:"Averaging",c:"Averaging Bias",q:[
+        ["Konsep apa yang relevan?","Averaging: penilaian dipengaruhi rata-rata konteks, bukan nilai absolut."],
+        ["Mengapa sebuah opsi terlihat baik hanya karena berada di antara opsi ekstrem?","Otak membandingkan secara relatif terhadap rata-rata lokal, bukan nilai intrinsik."],
+        ["Jika semua opsi dinilai secara terpisah, apakah averaging bias tetap kuat?","Bias melemah karena tidak ada konteks rata-rata yang terbentuk."]]}
+    ]
+  },
+  {
+    label:"Pertemuan 2", sub:"Bias Tambahan & Aplikasi",
+    cards:[
+      {icon:"🕳️",h:"Fundamental Attribution Error",lvl:"BIAS",p:"Tendensi menyalahkan disposisi/orang atas suatu peristiwa, sambil meremehkan faktor situasional."},
+      {icon:"✨",h:"Halo Effect",lvl:"BIAS",p:"Kesan positif pada satu atribut (misal penampilan) mewarnai penilaian atribut lain (misal kompetensi)."},
+      {icon:"🔍",h:"Confirmation Bias",lvl:"BIAS",p:"Mencari, menafsirkan, dan mengingat informasi yangconfirm/keyakinan yang sudah ada."},
+      {icon:"🗺️",h:"Choice Architecture",lvl:"APLIKASI",p:"Cara memilih disajikan membentuk keputusan. Design yang etis (nudge) memandu tanpa menghilangkan kebebasan."}
+    ],
+    blocks:[
+      {icon:"📰",h:"Availability Heuristic",lvl:"KONSEP",items:[
+        "Menilai probabilitas dari kemudahan contoh muncul di pikiran",
+        "Berita dramatis membuat orang overestimasi risiko"]},
+      {icon:"🎯",h:"Representativeness Heuristic",lvl:"KONSEP",items:[
+        "Menilai berdasarkan kesamaan dengan stereotip",
+        "Mengabaikan probabilitas dasar (base rate)"]},
+      {icon:"⚖️",h:"Atribusi & Bukti",lvl:"KRITIS",items:[
+        "Pisahkan dugaan dari fakta: klaim keterlibatan masih dalam penyidikan",
+        "Tunggu verifikasi sebelum menyimpulkan"]},
+      {icon:"🧭",h:"Mitigasi Bias",lvl:"SOLUSI",items:[
+        "Kumpulkan data independen sebelum terpapar angka pertama",
+        "Wajib cari bukti berlawanan untuk lawan confirmation bias",
+        "Sajikan kedua bingkai secara seimbang"]}
+    ],
+    quiz:[
+      {c:"Availability",q:"Availability heuristic adalah…",o:["Menilai probabilitas dari kemudahan contoh muncul di pikiran","Menyalahkan orang atas peristiwa","Mengabaikan base rate","Menilai berdasarkan stereotip"],a:0,x:"<b>Availability</b>: kita menilai seberapa sering sesuatu terjadi berdasarkan betapa mudahnya contoh muncul di pikiran."},
+      {c:"Availability Contoh",q:"Seseorang takut naik pesawat karena sering lihat berita kecelakaan, padahal statistik menunjukkan mobil lebih berbahaya. Ini contoh…",o:["Availability heuristic","Anchoring","Sunk cost fallacy","Mental accounting"],a:0,x:"Berita kecelakaan mudah diingat → membuat orang <b>overestimasi</b> risiko pesawat. Ini availability heuristic."},
+      {c:"Representativeness",q:"Representativeness heuristic menyebabkan orang…",o:["Menilai berdasarkan kesamaan dengan stereotip, mengabaikan base rate","Selalu mengikuti data statistik","Mengabaikan stereotip sepenuhnya","Hanya percaya pada angka"],a:0,x:"<b>Representativeness</b>: menilai berdasarkan kesamaan dengan stereotip, sering mengabaikan probabilitas dasar."},
+      {c:"Base Rate",q:"Mengabaikan probabilitas dasar saat menilai kemungkinan disebut kesalahan…",o:["Availability","Representativeness","Anchoring","Framing"],a:1,x:"Klasik <b>base rate neglect</b> — terkait erat dengan representativeness heuristic."},
+      {c:"Confirmation Bias",q:"Confirmation bias adalah…",o:["Mencari dan memprioritaskan informasi yang sesuai keyakinan","Mengabaikan semua informasi","Selalu berpikir objektif","Mencari hanya bukti yang bertentangan"],a:0,x:"<b>Confirmation bias</b>: kita mencari & mengingat hal yang mendukung keyakinan, mengabaikan yang bertentangan."},
+      {c:"Confirmation Mitigasi",q:"Cara paling efektif mengurangi confirmation bias adalah…",o:["Hanya percaya pada intuisi","Mewajibkan pencarian bukti yang bertentangan","Menghindari semua data","Ikut arus utama"],a:1,x:"Prosedur wajib mencari <b>diskonfirmasi</b> secara aktif terbukti efektif mengurangi confirmation bias."},
+      {c:"Halo Effect",q:"Ketika penampilan menarik membuat orang langsung dinilai lebih kompeten, itu disebut…",o:["Halo effect","Availability heuristic","Anchoring","Sunk cost"],a:0,x:"<b>Halo effect</b>: kesan positif pada satu atribut menyebar ke penilaian atribut lain tanpa dasar bukti."},
+      {c:"Atribusi",q:"Fundamental attribution error adalah kecenderungan untuk…",o:["Menyalahkan disposisi orang dan meremehkan faktor situasional","Selalu menyalahkan situasi","Tidak membuat atribusi sama sekali","Hanya menyalahkan diri sendiri"],a:0,x:"<b>Fundamental attribution error</b>: menyalahkan karakter/orang, meremehkan konteks situasi."},
+      {c:"Dugaan vs Fakta",q:"Mengapa penting membedakan 'dugaan' dengan 'fakta terbukti' sebelum menyebarkan informasi?",o:["Karena kesimpulan dini memperkuat confirmation bias & menyebarkan misinformasi","Tidak penting, semua sama","Karena semua berita pasti benar","Karena tidak ada penyidikan"],a:0,x:"Menyimpulkan dari dugaan sebagai fakta memperkuat <b>confirmation bias</b> dan menyebarkan misinformasi."},
+      {c:"Choice Architecture",q:"Choice architecture yang etis (nudge) sebaiknya…",o:["Menyajikan pilihan secara jujur & seimbang tanpa menghilangkan kebebasan","Memaksa satu pilihan","Menyembunyikan opsi lain","Manipulasi tanpa transparansi"],a:0,x:"Nudge yang etis: arahkan pilihan dengan <b>transparansi</b>, tetap pertahankan kebebasan memilih."}
+    ],
+    wawancara:[
+      {t:"Keterlibatan Dugaan",c:"Atribusi & Bukti",q:[
+        ["Konsep apa yang relevan?","Pisahkan dugaan dari fakta: klaim keterlibatan masih dalam penyidikan, bukan kebenaran final."],
+        ["Mengapa penting menunggu verifikasi sebelum menyimpulkan?","Kesimpulan dini memperkuat confirmation bias dan menyebarkan misinformasi."],
+        ["Jika bukti awal kuat tapi belum final, bagaimana menyajikannya?","Sajikan sebagai dugaan terverifikasi parsial dengan sumber & status proses, bukan sebagai fakta terbukti."]]},
+      {t:"Desain Choice Architecture",c:"Aplikasi Bias",q:[
+        ["Konsep apa yang paling relevan?","Choice architecture: mengatur cara pilihan disajikan untuk memandu keputusan tanpa menghilangkan kebebasan."],
+        ["Bagaimana menggunakan framing secara etis?","Sajikan bingkai yang jujur & seimbang; hindari memanipulasi dengan menyembunyikan bingkai lawan."],
+        ["Jika choice architecture diatur, apakah individu kehilangan otonomi?","Tidak selama opsi tetap tersedia (nudge), tapi perlu transparansi agar tidak menjadi manipulasi."]]},
+      {t:"Berita Viral",c:"Availability Heuristic",q:[
+        ["Konsep apa yang relevan?","Availability heuristic: menilai probabilitas dari kemudahan contoh muncul di pikiran."],
+        ["Mengapa berita dramatis membuat orang overestimasi risiko?","Contoh emosional & baru lebih mudah diingat, jadi terasa lebih sering terjadi."],
+        ["Jika data statistik dasar diberikan, apakah heuristik ini hilang?","Bisa dikoreksi, tapi kesan emosional sering tetap dominan tanpa data yang menonjol."]]},
+      {t:"Kandidat Menarik",c:"Halo Effect",q:[
+        ["Konsep apa yang relevan?","Halo effect: kesan positif pada satu atribut mewarnai penilaian atribut lain."],
+        ["Mengapa penampilan menarik sering dinilai lebih kompeten?","Kesan pertama positif 'menyebar' ke penilaian kemampuan tanpa dasar bukti."],
+        ["Jika penilaian berbasis data kinerja, apakah halo effect hilang?","Bisa ditekan, tapi bias tetap bekerja di bawah sadar pada penilaian cepat."]]},
+      {t:"Tim yang Salah",c:"Fundamental Attribution Error",q:[
+        ["Konsep apa yang relevan?","Fundamental attribution error: menyalahkan disposisi orang, meremehkan faktor situasional."],
+        ["Mengapa orang cepat menyimpulkan karakter dari satu perilaku?","Kognitif lebih murah menyalahkan individu daripada menganalisis faktor situasional."],
+        ["Jika informasi situasional diberikan lengkap, apakah bias ini hilang?","Bisa berkurang, tapi kecenderungan awal tetap muncul sebelum informasi diproses."]]},
+      {t:"Riset yang Separatis",c:"Confirmation Bias",q:[
+        ["Konsep apa yang relevan?","Confirmation bias: mencari & memprioritaskan informasi yang sesuai keyakinan."],
+        ["Mengapa orang sulit menerima bukti yang bertentangan?","Bukti bertentangan menimbulkan ketidaknyamanan kognitif dan ancaman identitas."],
+        ["Jika dipaksa mencari bukti berlawanan, apakah bias ini hilang?","Bisa dikurangi secara signifikan dengan prosedur wajib mencari diskonfirmasi."]]},
+      {t:"Kasus yang Mirip Stereotip",c:"Representativeness Heuristic",q:[
+        ["Konsep apa yang paling relevan?","Representativeness: menilai berdasarkan kesamaan dengan stereotip, mengabaikan probabilitas dasar."],
+        ["Mengapa orang mengabaikan base rate dalam penilaian?","Kesamaan stereotip lebih mencolok daripada statistik abstrak."],
+        ["Jika base rate ditekankan, apakah heuristik ini hilang?","Bisa diperbaiki, tapi representasi stereotip tetap menarik perhatian pertama."]]}
+    ]
+  }
+  ]
+}
+];
+
+/* ============================================================ RENDER */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+let cur={course:null,ptm:null};
+
+function showView(id){
+  ['viewHome','viewCourse','viewPtm'].forEach(v=>{$(v).hidden=(v!==id);});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderCrumbs(parts){
+  const c=$('crumbs');
+  c.innerHTML='<button onclick="goHome()">🏠 Beranda</button>'+parts.map((p,i)=>
+    `<span class="sep">›</span><button onclick="${p.fn}">${esc(p.label)}</button>`).join('')
+    +(parts.length?`<span class="sep">›</span><span class="cur">${esc(parts[parts.length-1].active||'')}</span>`:'');
+}
+
+function goHome(){
+  cur={course:null,ptm:null};
+  renderCrumbs([]);
+  const total=COURSES.reduce((n,c)=>n+c.pertemuan.length,0);
+  $('courseGrid').innerHTML=COURSES.map((c,i)=>{
+    const q=c.pertemuan.reduce((n,p)=>n+(p.quiz?p.quiz.length:0),0);
+    const w=c.pertemuan.reduce((n,p)=>n+(p.wawancara?p.wawancara.length:0),0);
+    return `<div class="ccard" onclick="goCourse(${i})">
+      <div class="cnum">${String(i+1).padStart(2,'0')}</div>
+      <div class="ceb">${esc(c.eyebrow)}</div>
+      <h3>${esc(c.title)}</h3>
+      <p>${esc(c.summary)}</p>
+      <div class="ctags">
+        <span class="tag a">${c.pertemuan.length} pertemuan</span>
+        <span class="tag">📝 ${q} kuis</span>
+        <span class="tag">💬 ${w} kartu</span>
+      </div></div>`;
+  }).join('');
+  $('footSrc').innerHTML=COURSES.length>1
+    ? `<b>Mata kuliah:</b> ${COURSES.map(c=>esc(c.title)).join(' · ')}`
+    : `<b>Sumber:</b> ${esc(COURSES[0].eyebrow)}`;
+  showView('viewHome');
+}
+
+function goCourse(i){
+  cur.course=i;cur.ptm=null;
+  const c=COURSES[i];
+  renderCrumbs([{label:c.title,fn:`goCourse(${i})`}]);
+  $('courseHead').innerHTML=`<div class="cbanner"><div class="cnum">${String(i+1).padStart(2,'0')}</div>
+    <div class="chdr"><div class="eyebrow">${esc(c.eyebrow)}</div><h2>${esc(c.title)}</h2>
+    <p class="csummary">${esc(c.summary)}</p></div></div>`;
+  $('ptmList').innerHTML=c.pertemuan.map((p,j)=>{
+    const q=p.quiz?p.quiz.length:0, w=p.wawancara?p.wawancara.length:0, k=p.cards?p.cards.length:0;
+    return `<div class="pcard" onclick="goPtm(${i},${j})">
+      <div class="pnum">${String(j+1).padStart(2,'0')}</div>
+      <div><h4>${esc(p.label)}</h4><div class="psub">${esc(p.sub)}</div>
+      <div class="ptags">
+        <span class="tag a">${k} kartu</span>
+        <span class="tag">📝 ${q} kuis</span>
+        <span class="tag">💬 ${w} kartu wawancara</span>
+      </div></div></div>`;
+  }).join('');
+  showView('viewCourse');
+}
+
+function goPtm(i,j){
+  cur.course=i;cur.ptm=j;
+  const c=COURSES[i],p=c.pertemuan[j];
+  renderCrumbs([{label:c.title,fn:`goCourse(${i})`},{label:p.label,active:p.sub}]);
+  let h=`<div class="course"><div class="cbanner"><div class="cnum">${String(i+1).padStart(2,'0')}</div>
+    <div class="chdr"><div class="eyebrow">${esc(c.eyebrow)}</div><h2>${esc(c.title)}</h2>
+    <p class="csummary">${esc(c.summary)}</p></div></div>
+    <div class="ptitle">${esc(p.label)} · ${esc(p.sub)}</div></div>`;
+
+  if(p.cards&&p.cards.length){
+    h+=`<div class="subsec"><div class="sec-h"><div class="n">A</div><h3>Ringkasan Materi</h3></div>
+      <div class="grid">${p.cards.map(cd=>`
+        <div class="card"><h4>${esc(cd.icon||'')} ${esc(cd.h)}</h4><span class="lvl">${esc(cd.lvl||'')}</span>
+        <p>${esc(cd.p||'')}</p>${(cd.ul||[]).length?`<ul>${cd.ul.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}</div>`).join('')}</div></div>`;
+  }
+  if(p.blocks&&p.blocks.length){
+    h+=`<div class="subsec"><div class="sec-h"><div class="n">B</div><h3>Peta Konsep</h3></div>
+      <div class="grid">${p.blocks.map(bd=>`
+        <div class="card"><h4>${esc(bd.icon||'')} ${esc(bd.h)}</h4><span class="lvl">${esc(bd.lvl||'')}</span>
+        <ul>${bd.items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('')}</div></div>`;
+  }
+  if(p.table){
+    const t=p.table;
+    h+=`<div class="subsec"><div class="sec-h"><div class="n">C</div><h3>${esc(t.title||'Perbandingan')}</h3></div>
+      <p class="sec-sub">${esc(t.note||'Perbandingan dua pendekatan.')}</p>
+      <div class="tbl-wrap"><table><thead><tr><th>${esc(t.first||'Item')}</th><th class="low">${esc(t.low)}</th><th class="diff">${esc(t.diff)}</th></tr></thead><tbody>
+      ${t.rows.map(r=>`<tr><td class="f">${esc(r[0])}</td><td class="low">${esc(r[1])}</td><td class="diff">${esc(r[2])}</td></tr>`).join('')}
+      </tbody></table></div></div>`;
+  }
+  if(p.quiz&&p.quiz.length){
+    const qid=`quiz-${c.id}-p${j}`;
+    h+=`<div class="subsec"><div class="sec-h"><div class="n">D</div><h3>Kuis Interaktif</h3></div>
+      <p class="sec-sub">${p.quiz.length} soal pilihan ganda · urutan diacak · ada pembahasan & skor.</p>
+      <div class="qbox" id="${qid}">
+        <div class="startq"><p style="color:var(--muted);margin-bottom:14px">Siap menguji pemahamanmu?</p>
+          <button class="btn" data-start="${qid}">🚀 Mulai Kuis</button></div>
+        <div class="playq hidden">
+          <div class="qmeta"><span class="qbadge">Soal 1</span><span class="scorepill">⭐ <span class="scoreLive">0</span></span></div>
+          <div class="pbar"><div class="pfill prog"></div></div>
+          <div class="qmeta"><span class="qProg"></span><span class="qCat"></span></div>
+          <div class="qtext qText"></div><div class="opts"></div>
+          <div class="fb"></div><button class="btn nextq" style="display:none"></button>
+        </div>
+        <div class="endq hidden" style="text-align:center">
+          <div class="rescore finalScore">0/0</div><p class="endMsg" style="color:var(--muted)"></p>
+          <button class="btn ghost toggleRev">Lihat Pembahasan</button>
+          <div class="review hidden"></div>
+          <button class="btn restart">🔁 Ulangi</button></div>
+      </div></div>`;
+  }
+  if(p.wawancara&&p.wawancara.length){
+    h+=`<div class="subsec"><div class="sec-h"><div class="n">E</div><h3>Kartu Wawancara</h3></div>
+      <p class="sec-sub">${p.wawancara.length} skenario (Q1 konsep · Q2 terapkan · Q3 kontrafaktual).</p>
+      <div class="wcards">${p.wawancara.map((w,wi)=>`
+        <div class="wcard"><h4>[${String(wi+1).padStart(2,'0')}] ${esc(w.t)}</h4>
+        <div class="concept">${esc(w.c)}</div>
+        ${w.q.map(([t,a])=>`<div class="q"><div class="t">Q · ${esc(t)}</div><div class="a">${esc(a)}</div></div>`).join('')}
+        </div>`).join('')}</div></div>`;
+  }
+  $('ptmMount').innerHTML=h;
+  if(p.quiz&&p.quiz.length)initQuiz(`quiz-${c.id}-p${j}`,p.quiz);
+  showView('viewPtm');
+}
+
+/* ============================================================ QUIZ ENGINE */
+function initQuiz(boxId,quiz){
+  const box=$(boxId);
+  if(!box)return;
+  const start=box.querySelector('.startq'),play=box.querySelector('.playq'),end=box.querySelector('.endq');
+  let qi=0,score=0,answered=false,order=[];
+  const KEYS=['A','B','C','D','E'];
+  const q=el=>box.querySelector(el);
+  start.querySelector('[data-start]').onclick=()=>{
+    order=quiz.map((_,i)=>i);
+    for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}
+    qi=0;score=0;answered=false;start.classList.add('hidden');end.classList.add('hidden');play.classList.remove('hidden');show();
+  };
+  function show(){
+    answered=false;const it=quiz[order[qi]];
+    q('.qbadge').textContent='Soal '+(qi+1);
+    q('.qProg').textContent=(qi+1)+' / '+quiz.length;
+    q('.qCat').textContent=it.c;q('.qText').textContent=it.q;
+    q('.prog').style.width=(qi/quiz.length*100)+'%';q('.scoreLive').textContent=score;
+    q('.fb').className='fb';q('.nextq').style.display='none';
+    q('.opts').innerHTML=it.o.map((op,i)=>`<button class="opt" data-i="${i}"><span class="k">${KEYS[i]}</span><span>${esc(op)}</span></button>`).join('');
+    q('.opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>pick(+b.dataset.i,b));
+  }
+  function pick(i,el){
+    if(answered)return;answered=true;const it=quiz[order[qi]];
+    q('.opts').querySelectorAll('.opt').forEach((b,j)=>{b.disabled=true;
+      if(j===it.a)b.classList.add('correct');
+      if(j===i&&i!==it.a)b.classList.add('wrong');});
+    const fb=q('.fb');
+    if(i===it.a){score++;q('.scoreLive').textContent=score;fb.className='fb ok show';fb.innerHTML='✅ <b>Benar!</b> '+it.x;}
+    else{fb.className='fb bad show';fb.innerHTML='❌ <b>Kurang tepat.</b> '+it.x;}
+    const nb=q('.nextq');nb.style.display='inline-block';
+    nb.textContent=(qi===quiz.length-1)?'Lihat Hasil 🏆':'Soal Berikutnya →';
+    nb.onclick=()=>{qi<quiz.length-1?(qi++,show()):finish();};
+  }
+  function finish(){
+    play.classList.add('hidden');end.classList.remove('hidden');
+    const pct=Math.round(score/quiz.length*100);
+    q('.finalScore').textContent=score+'/'+quiz.length;
+    q('.endMsg').textContent=(pct>=85?'🌟 Luar biasa!':pct>=70?'👍 Bagus!':pct>=50?'📚 Cukup.':'💪 Semangat!')+' ('+pct+'%)';
+    q('.review').innerHTML=quiz.map((it,i)=>`<div class="rvi"><div class="rq">${i+1}. ${esc(it.q)}</div><div class="ra ok">✔ ${esc(it.o[it.a])}</div></div>`).join('');
+    q('.toggleRev').onclick=()=>q('.review').classList.toggle('hidden');
+    q('.restart').onclick=()=>{end.classList.add('hidden');play.classList.add('hidden');start.classList.remove('hidden');};
+  }
+}
+
+goHome();
+</script>
+</body>
+</html>
