@@ -335,6 +335,50 @@ window.DATA_MANAJEMEN_PROYEK = {
         ["Work package bisa dianggap sebagai apa lagi?", "Mini-project sendiri — finite length, budget, deliverable tersedia."],
         ["Apa metrik untuk track work package?", "Labor hours, calendar time, cost, report period, risk — semua harus measurable."]]}
     ]
+  },
+  {
+    label:"Pertemuan 7", sub:"Bab 7 · Risk Management",
+    cards:[
+      {icon:"⚠️",h:"Definisi & Jenis Risiko",lvl:"KONSEP",p:"Risiko adalah peristiwa/kondisi tidak pasti yang berdampak positif atau negatif pada tujuan proyek. Event Risk = probabilitas × konsekuensi. Empat kategori: teknis, komersial, eksekusi, kontraktual/hukum."},
+      {icon:"🧭",h:"Empat Tahap Manajemen Risiko",lvl:"PROSES",p:"(1) Identifikasi melalui brainstorming, ahli, sejarah, tim, dan RBS. (2) Analisis probabilitas-konsekuensi, kualitatif maupun kuantitatif. (3) Mitigasi. (4) Kontrol dan dokumentasi: apa, siapa, kapan, mengapa, bagaimana."},
+      {icon:"🧮",h:"Risk Factor (RF)",lvl:"RUMUS",p:"Pf = (Pm + Pc + Pd) / 3; Cf = (Cc + Cs + Cr + Cp) / 4; RF = Pf + Cf − (Pf × Cf). Skor 0,1–0,9; RF < 0,30 rendah, 0,30–0,70 sedang, >0,70 tinggi. Pastikan pembagi Cf empat."},
+      {icon:"🛡️",h:"Empat Strategi Mitigasi",lvl:"TINDAKAN",p:"Accept: terima risiko; Minimize: turunkan peluang/dampak; Share: berbagi dengan mitra; Transfer: alihkan melalui kontrak atau asuransi. Pilih sesuai risiko—jangan otomatis memakai minimize untuk semuanya."},
+      {icon:"💰",h:"Contingency Reserve",lvl:"ANGGARAN",p:"Expected cost tugas = estimasi biaya tugas × contingency multiplier. Contoh slide: biaya dasar Rp850 juta, estimasi setelah cadangan Rp1.044 juta; task contingency Rp194 juta (22,8%). Cadangan manajerial berada di tingkat proyek untuk perubahan lingkup besar atau bencana."},
+      {icon:"🌉",h:"Pelajaran Tacoma Narrows",lvl:"STUDI KASUS",p:"Jembatan runtuh empat bulan setelah dibuka. Slide menyoroti rasio lebar-panjang, girder padat yang menangkap angin, dan kondisi lokasi. Pelajaran manajemen risiko: periksa asumsi tentang bahaya yang perlu dihitung dan tanggapi tanda peringatan sebelum kegagalan."},
+      {icon:"📈",h:"Matriks & Ambang Risiko",lvl:"ANALISIS",p:"Tempatkan risiko menurut probabilitas dan konsekuensi. Pada contoh ABCups, RF ≈0,715 sehingga termasuk tinggi (>0,70). Risiko berkonsekuensi tinggi tetapi probabilitas rendah dapat tetap berada di kategori moderat."}
+    ],
+    blocks:[
+      {icon:"🧾",h:"Rumus dan Istilah",lvl:"RINGKASAN",items:[
+        "Pf (probability factor) = rata-rata Pm, Pc, Pd.",
+        "Cf (consequence factor) = rata-rata Cc, Cs, Cr, Cp.",
+        "RF = Pf + Cf − (Pf × Cf); nilai tinggi pada satu dimensi dapat menaikkan RF.",
+        "Contoh aplikasi kasir: Pf 0,5667; Cf 0,50; RF 0,7833 → risiko tinggi; perlu mitigasi tertulis dan contingency reserve."]},
+      {icon:"🧯",h:"Penerapan Mitigasi",lvl:"KEPUTUSAN",items:[
+        "Accept untuk risiko kecil atau yang melekat pada industri.",
+        "Minimize dengan menurunkan probabilitas atau dampak.",
+        "Share dengan mitra; transfer melalui kontrak harga tetap, liquidated damages, atau asuransi.",
+        "Risiko berdampak tinggi perlu rencana kontinjensi tertulis; dokumentasikan pemilik dan tindakan kontrol."]}
+    ],
+    quiz:[
+      {c:"Definisi",q:"Menurut materi, risiko proyek adalah…",o:["Peristiwa tidak pasti yang dapat berdampak positif atau negatif pada tujuan proyek","Masalah yang pasti terjadi dan selalu merugikan","Perubahan anggaran saja","Kegiatan rutin tanpa batas waktu"]},
+      {c:"Pengukuran",q:"Bagaimana Event Risk dihitung?",o:["Probabilitas × konsekuensi","Probabilitas + durasi","Biaya ÷ waktu","Konsekuensi − biaya"]},
+      {c:"Proses",q:"Mana urutan empat tahap manajemen risiko yang benar?",o:["Identifikasi, analisis, mitigasi, kontrol/dokumentasi","Analisis, tutup, identifikasi, audit","Mitigasi, anggaran, eksekusi, tutup","Kontrol, transfer, identifikasi, seleksi"]},
+      {c:"Risk Factor",q:"Apa rumus Pf dalam materi?",o:["(Pm + Pc + Pd) / 3","(Cc + Cs + Cr + Cp) / 4","Pm × Pc × Pd","(Pm + Pc) / 2"]},
+      {c:"Risk Factor",q:"Berapa pembagi untuk menghitung Cf?",o:["4","3","2","5"]},
+      {c:"Risk Factor",q:"Jika RF = 0,7833, kategori risikonya adalah…",o:["Tinggi","Rendah","Sedang","Tidak dapat ditentukan"]},
+      {c:"Mitigasi",q:"Strategi mana yang membagi risiko dengan mitra?",o:["Share","Accept","Minimize","Transfer"]},
+      {c:"Mitigasi",q:"Kontrak harga tetap terutama memindahkan risiko pembengkakan biaya kepada…",o:["Kontraktor","Klien","Pengguna akhir","Regulator"]},
+      {c:"Contingency",q:"Rumus expected cost tugas menurut slide adalah…",o:["Estimasi biaya tugas × contingency multiplier","Estimasi biaya + probabilitas","Biaya proyek ÷ jumlah tugas","Biaya aktual − contingency"]},
+      {c:"Studi Kasus",q:"Apa pelajaran risiko utama dari Tacoma Narrows dalam slide?",o:["Asumsi tentang bahaya perlu diperiksa dan tanda peringatan ditanggapi","Semua kegagalan hanya disebabkan pekerja","Asuransi menjamin proyek aman","Risiko teknis tidak dapat diidentifikasi"]},
+      {c:"Analisis",q:"Mengapa risiko 5 pada contoh ABCups disebut moderat meski konsekuensinya tinggi?",o:["Probabilitasnya rendah sehingga kategorinya tidak otomatis tinggi","Semua risiko dengan konsekuensi tinggi pasti rendah","Tidak ada dampak pada proyek","Karena risikonya sudah ditransfer"]},
+      {c:"Dokumentasi",q:"Risiko pada kotak kanan atas matriks (probabilitas dan konsekuensi tinggi) wajib memiliki…",o:["Rencana kontinjensi tertulis","Penghapusan seluruh dokumentasi","Persetujuan tanpa analisis","Penundaan identifikasi"]}
+    ],
+    wawancara:[
+      {t:"Galaxy Note 7: kapan risiko bisa dicegah?",c:"Diskusi risiko",q:[
+        ["Apa pertanyaan utama dari aktivitas otopsi kasus?","Pada titik mana risiko dapat dicegah, dan apa yang menghalangi pencegahannya? Slide menyebut Samsung menguji baterainya sendiri meski tersedia laboratorium CTIA bersertifikat."],
+        ["Apa bedanya mitigasi dan menghapus pemeriksaan independen?","Mitigasi mengurangi probabilitas atau dampak sambil tetap melakukan pengawasan memadai; menghilangkan pemeriksaan independen dapat mengurangi kontrol."],
+        ["Apa yang perlu dicatat tim proyek dari kasus ini?","Catat risiko, pemilik, kontrol independen, indikator peringatan, dan rencana kontinjensi."]]}
+    ]
   }
   ]
 };
