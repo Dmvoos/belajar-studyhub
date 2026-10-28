@@ -3,53 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Belajar — Study Hub per Mata Kuliah</title>
-<link rel="stylesheet" href="style.css">
+<title>StudyHub — Belajar per Mata Kuliah</title>
+<link rel="stylesheet" href="StudyHub-Modular/style.css">
 </head>
 <body>
-
-<div class="topbar">
-  <div class="wrap topin">
-    <div class="brand" onclick="goHome()"><span class="dot"></span>StudyHub</div>
-    <div class="crumbs" id="crumbs"></div>
-  </div>
-</div>
-
-<div class="wrap">
-  <!-- HOME: daftar mata kuliah -->
-  <div class="view" id="viewHome">
-    <h1 class="htitle">📚 Study Hub</h1>
-    <p class="hsub">Pilih mata kuliah, lalu pilih pertemuan. Materi, peta konsep, tabel, kuis, dan kartu wawancara tersedia per pertemuan.</p>
-    <div class="cgrid" id="courseGrid"></div>
-  </div>
-
-  <!-- COURSE: pilihan pertemuan -->
-  <div class="view" id="viewCourse" hidden>
-    <button class="backbtn" onclick="goHome()">← Kembali ke daftar mata kuliah</button>
-    <div id="courseHead"></div>
-    <h3 style="margin:22px 0 12px;font-size:1.1rem">Pilih pertemuan</h3>
-    <div class="plist" id="ptmList"></div>
-  </div>
-
-  <!-- PERTEMUAN: konten -->
-  <div class="view" id="viewPtm" hidden>
-    <button class="backbtn" onclick="goCourse(cur.course)">← Kembali ke pertemuan</button>
-    <div id="ptmMount"></div>
-  </div>
-</div>
-
-<footer>
-  <div class="wrap">
-    <p id="footSrc"></p>
-    <p style="margin-top:8px">Study Hub · aplikasi belajar per mata kuliah · otomatis dari PPT/slide</p>
-  </div>
-</footer>
-
-<script src="data/tdo.js"></script>
-<script src="data/manajemen-proyek.js"></script>
-<script src="data/ekonomi-perilaku.js"></script>
-<script src="data/perilaku-konsumen.js"></script>
-<script src="data/statistika-bisnis.js"></script>
-<script src="app.js"></script>
+<div id="studyhub-app"></div>
+<script>
+(async function(){
+  const root=document.getElementById('studyhub-app');
+  try {
+    const response=await fetch('StudyHub-Modular/index.html',{cache:'no-store'});
+    if(!response.ok) throw new Error('HTTP '+response.status);
+    const doc=new DOMParser().parseFromString(await response.text(),'text/html');
+    root.innerHTML=doc.body.innerHTML;
+    for(const item of Array.from(doc.querySelectorAll('script[src]'))){
+      const script=document.createElement('script');
+      script.src='StudyHub-Modular/'+item.getAttribute('src').replace(/^\.\//,'');
+      script.async=false;
+      document.body.appendChild(script);
+      await new Promise((resolve,reject)=>{script.onload=resolve;script.onerror=()=>reject(new Error('Gagal memuat '+script.src));});
+    }
+  } catch(error) {
+    root.innerHTML='<main style="font-family:system-ui;padding:2rem"><h1>StudyHub gagal dimuat</h1><p>'+String(error.message)+'</p></main>';
+    console.error(error);
+  }
+})();
+</script>
 </body>
 </html>

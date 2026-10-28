@@ -9,6 +9,7 @@ html{scroll-behavior:smooth}
 body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
   background:radial-gradient(ellipse at 50% 0%,#211b31 0,var(--bg) 42%);
   color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+body>.topbar,body>footer{display:none}
 a{color:var(--accent);text-decoration:none;transition:color .2s} a:hover{color:#fff}
 .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
 
