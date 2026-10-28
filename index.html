@@ -745,6 +745,76 @@ const COURSES=[
         ["Apakah pengakuan lebih kuat dari insentif formal?","Ya — ketika otoritas terbatas, pengakuan atas kontribusi kongkret jauh lebih kuat karena tidak terikat budget formal."],
         ["Tim teknis VW tak bisa memecat: apa yang harus dilakukan?","Dorong budaya etis (whistleblower protection), jangan ikut menyelesaikan masalah teknis. Fokus pada safety culture agar kabar buram tak tersembunyi."]]}
     ]
+  },
+  {
+    label:"Pertemuan 5", sub:"Bab 5 · Scope Management",
+    cards:[
+      {icon:"🧭",h:"Scope Management Fundamentals",lvl:"KONSEP",p:"Project scope = segala sesuatu tentang proyek: work content, expected outcomes, quality standards. Six scope management activities: (1) conceptual development, (2) scope statement, (3) work authorization, (4) scope reporting, (5) control systems, (6) project closeout."},
+      {icon:"🎯",h:"Conceptual Development",lvl:"FASILITAS",p:"Problem/need statement, requirements gathering (product/quality/performance), information gathering, constraints, alternative analysis, project objectives, business case. Contoh: Freefield Township health grant proposal."},
+      {icon:"📋",h:"Statement of Work",lvl:"DOKUMEN",p:"SOW = deskripsi naratif rinci pekerjaan. Elemen: intro/background, technical description, timeline/milestones, objectives, scope, tasks, selection criteria, deliverables, security, place of performance. 1908 Wright Brothers (1 hal) vs F-35 (100 hal)."},
+      {icon:"🔨",h:"Work Breakdown Structure",lvl:"WBS",p:"Hierarchical decomposition of total scope. Level 1 (Project) → Level 2 (Deliverable) → Level 3 (Subdeliverable) → Level 4 (Work Package). 6 purposes: echo objectives, org chart, cost/schedule tracking, communication, control, scope baseline."},
+      {icon:"🔄",h:"Control Systems & Config Mgmt",lvl:"CONTROL",p:"6 control systems: configuration control, design control, trend monitoring, document control, acquisition control, specification control. Config Management 4 stages: identification, review, control, status accounting."},
+      {icon:"♻️",h:"Project Closeout & Sustainability",lvl:"SUSTAIN",p:"Closeout: historical records, post-project analysis, financial closeout. Sustainability triple bottom line: economic, social, environmental. Prinsip: 'doing well by doing right'."}
+    ],
+    blocks:[
+      {icon:"📊",h:"WBS Hierarchy & Work Package",lvl:"STRUKTUR",items:[
+        "Hierarchy: Level 1 (Project) → Level 2 (Deliverable) → Level 3 (Subdeliverable) → Level 4 (Work Package). Work package = unit terkecil yang assignable.",
+        "7 points: (1) lowest level in WBS, (2) has deliverable, (3) one owner, (4) mini-project, (5) may include milestones, (6) fits org culture, (7) trackable by labor hours/cost/time/risk.",
+        "WBS codes (1.0, 1.1, 1.1.1, etc.) assigned by accounting untuk cost allocation dan financial control."]},
+      {icon:"⚙️",h:"Configuration Management Stages",lvl:"PROSES",items:[
+        "Stage 1 - Identification: develop WBS to activity level, analyze component specifications.",
+        "Stage 2 - Review: meet stakeholders, agree on current project definition & component specs.",
+        "Stage 3 - Control: refine breakdown, resolve disagreements by cycling back to original scope/WBS.",
+        "Stage 4 - Status accounting: maintain memory of all configurations, cycle back to previous versions if needed."]},
+      {icon:"🌱",h:"Triple Bottom Line Sustainability",lvl:"ETHICS",items:[
+        "Economic: profit, revenue, cost efficiency — proyek harus feasible secara finansial.",
+        "Social: fair labor, community impact, stakeholder wellbeing — Qatar World Cup contoh kegagalan.",
+        "Environmental: carbon footprint, waste reduction, resource conservation — minimize negative impact."]}
+    ],
+    table:{
+      title:"WBS vs OBS",
+      note:"WBS = struktur logis proyek; OBS = struktur organisasi biaya. Keduanya saling melengkapi untuk cost control.",
+      first:"Aspek",
+      low:"▸ WBS", diff:"▸ OBS",
+      rows:[
+        ["Fokus","Dekomposisi scope kerja","Assign work ke departemen/orang"],
+        ["Struktur","Hierarchy deliverable → work package","Hierarchy departemen → cost account"],
+        ["Output","Identifikasi semua elemen proyek","Link work packages ke cost accounts"],
+        ["Komunikasi","Bagaimana pieces fit together","Siapa yang bertanggung jawab"],
+        ["Kontrol","Scope baseline & activity tracking","Budget & cost control per department"],
+        ["Contoh","IT Installation: 11 deliverables","3 departments: IT, Procurement, HR"]
+      ]
+    },
+    quiz:[
+      {c:"Scope Management",q:"Apa perbedaan project scope dan scope management?",o:["Scope = apa yang dilakukan; Management = proses mengontrol scope","Scope = timeline; Management = budget","Scope = hasil; Management = proses","Scope = resources; Management = team"]},
+      {c:"Conceptual Development",q:"Langkah ke-3 dalam conceptual development adalah?",o:["Problem/need statement","Requirements gathering","Information gathering","Constraints"]},
+      {c:"WBS",q:"Apa tingkatan terendah dari Work Breakdown Structure?",o:["Deliverable","Subdeliverable","Work package","Task"]},
+      {c:"Config Management",q:"Tahap ke-3 dalam Configuration Management adalah?",o:["Configuration identification","Configuration review","Configuration control","Status accounting"]},
+      {c:"Project Closeout",q:"Apa tiga elemen penting project closeout?",o:["Historical records, post-project analysis, financial closeout","Budget, schedule, scope","Documentation, testing, handover","Lessons learned, audit, termination"]},
+      {c:"Sustainability",q:"Apa isi dari 'triple bottom line' sustainability?",o:["Economic, social, environmental","Cost, time, scope","Quality, risk, communication","Planning, execution, closeout"]}
+    ],
+    wawancara:[
+      {t:"Berlin Brandenburg Airport: A Scope Management Catastrophe",c:"Scope Failure",q:[
+        ["Apa perkiraan biaya awal vs biaya akhir?","Awal $2.1 miliar, akhirnya naik jadi $7+ miliar — scope tak terkontrol."],
+        ["Apa penyebab utama delay?", "Politisi mengganti CEO berulang kali, bukan ahli infrastruktur. 800 fire spotter menggantikan sistem pemadam yang bermasalah."],
+        ["Pelajaran utama?", "Scope management harus dimulai dengan perencanaan matang. Political interference & keputungan personal = resep bencana."]]},
+      {t:"Death March Projects: IT Project Nightmare",c:"Box 5.1",q:[
+        ["Apa definisi death march project?", "Proyek yang parameters melebihi norma setidaknya 50% — jadwal setengah, tim setengah, budget setengah."],
+        ["Mengapa death march umum?", "Politik, naive promises, naive optimism, start-up mentality, Marine Corps attitude — semua sumber rasa lelah."],
+        ["Bagaimana mencegah?", "Start with the end in mind: pastikan budget, personil, jadwal mendukung keberhasilan proyek."]]},
+      {t:"Statement of Work Evolution: 1908 vs 2001",c:"SOW Complexity",q:[
+        ["Berapa halaman SOW Wright Brothers 1908?", "Hanya 1 halaman — ringkas: bisa dilepas, dirakit dalam 1 jam, portabel di kereta."],
+        ["Berapa halaman SOW F-35 2001?", "Hampir 100 halaman dengan 300+ paragraf requirements — jauh lebih kompleks."],
+        ["Apa pelajaran evolusi SOW?", "SOW semakin kompleks seiring produk canggih & regulasi legal ketat. Detail penting tapi harus readable."]]},
+      {t:"Qatar World Cup 2022: Sustainability vs Labor Rights",c:"Triple Bottom Line",q:[
+        ["Berapa jumlah pekerja asing impor di Qatar?", "Diperkirakan 1.8 juta pekerja asing untuk stadion construction."],
+        ["Masalah sustainability apa?", "Social sustainability gagal: pekerja dibandingkan sebagai 'slave labor', estimated 7000 kematian."],
+        ["Prinsip sustainability yang dilanggar?", "Values and ethics: etis sustainability harus prioritas, bukan sekadar 'doing well by doing right'."]]},
+      {t:"Defining Project Work Package",c:"WBS Best Practice",q:[
+        ["Work package harus memiliki berapa owner?", "Satu — satu orang yang 'directly answerable' untuk work package."],
+        ["Work package bisa dianggap sebagai apa lagi?", "Mini-project sendiri — finite length, budget, deliverable tersedia."],
+        ["Apa metrik untuk track work package?", "Labor hours, calendar time, cost, report period, risk — semua harus measurable."]]}
+    ]
   }
   ]
 },
