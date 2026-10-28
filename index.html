@@ -473,7 +473,8 @@ const COURSES=[
         ["Perusahaan ingin ekspansi cepat dengan modal terbatas. Mekanisme mana?","Franchising — mitra menanggung sebagian investasi sementara perusahaan mempertahankan kendali atas merek dan standar."],
         ["Risiko utama bila memilih outsourcing untuk komponen kritis?","Ketergantungan pada sedikit mitra dan specific assets membuat biaya transaksi serta risiko pasokan naik; perlu kontrak jangka panjang atau kemitraan."]]}
     ]
-  }
+  },
+
 
   ]
 },
@@ -612,6 +613,137 @@ const COURSES=[
         ["Konsep apa yang relevan?","Budaya = aturan tak tertulis; estimasi yang dipadatkan & escalation of commitment."],
         ["Apa dampak budaya 'semua estimasi otomatis dipotong 20%'?","Informasi jadi tidak jujur, perencanaan rusak, kabar buruk tak sampai ke pengambil keputusan — seperti Boeing's Fatal Flaw."],
         ["Apa yang harus berubah agar kabar buruk bisa naik lebih cepat?","Sistem imbalan & norma yang menghargai estimasi jujur; mekanisme escalation berbasis penilaian objektif."]]}
+    ]
+  },
+  {
+    label:"Pertemuan 3", sub:"Bab 3 · Project Selection & Portfolio Management",
+    cards:[
+      {icon:"🎯",h:"6 Kriteria Model",lvl:"KRITERIA",p:"Realism, Capability, Flexibility, Ease of Use, Cost, Comparability. Model yang baik harus realistis dan murah dioperasikan."},
+      {icon:"💰",h:"Model Finansial",lvl:"FINANSIAL",p:"Payback (kecepatan), NPV (nilai waktu uang), Discounted Payback, dan IRR. NPV adalah 'gold standard' dalam seleksi proyek."},
+      {icon:"📊",h:"Matriks Portofolio",lvl:"STRATEGI",p:"Memetakan proyek ke dalam 4 kategori: Pearls, Oysters, Bread & Butter, dan White Elephants untuk menjaga keseimbangan investasi."},
+      {icon:"🐘",h:"White Elephants",lvl:"RISIKO",p:"Proyek teknis sulit dengan hasil kecil. Sering dipertahankan karena 'Escalation of Commitment' atau dukungan politik."}
+    ],
+    blocks:[
+      {icon:"🔍",h:"6 Kriteria Screening",lvl:"KONSEP",items:[
+        "Realism: Mencerminkan kendala nyata & risiko",
+        "Capability: Bisa membandingkan jenis proyek berbeda",
+        "Flexibility: Mudah diubah saat kondisi berubah",
+        "Ease of Use: Sederhana & cepat digunakan",
+        "Cost: Biaya model rendah (tidak mahal)",
+        "Comparability: Bisa bandingkan banyak proyek sekaligus"]},
+      {icon:"📉",h:"Metode Finansial",lvl:"KUANTITATIF",items:[
+        "Payback: Seberapa cepat uang kembali (abaikan nilai waktu uang)",
+        "NPV: Nilai sekarang dari arus kas (paling akurat)",
+        "IRR: Tingkat diskonto saat NPV = 0",
+        "GIGO: Garbage In, Garbage Out (angka palsu = keputusan buruk)"]},
+      {icon:"🔮",h:"Matriks Portofolio",lvl:"PEMETAAN",items:[
+        "Pearls: Teknis mudah, komersial besar (Aplikasi baru teknologi mapan)",
+        "Oysters: Teknis sulit, komersial besar (Teknologi baru revolusioner)",
+        "Bread & Butter: Teknis mudah, komersial sedang (Perbaikan bertahap)",
+        "White Elephants: Teknis sulit, komersial kecil (Harus diburu/dibuang)"]}
+    ],
+    table:{
+      title:"Payback vs NPV",
+      note:"Berdasarkan simulasi Proyek Melati (menang di Payback) vs Proyek Kenanga (menang di NPV).",
+      first:"Aspek",
+      low:"▸ Payback Period", diff:"▸ NPV (Net Present Value)",
+      rows:[
+        ["Fokus Utama","Kecepatan balik modal","Besaran nilai tambah ekonomi"],
+        ["Nilai Waktu Uang","Diabaikan (Simple Payback)","Dipertimbangkan sepenuhnya"],
+        ["Arus Kas Lanjutan","Diabaikan setelah titik impas","Seluruh arus kas dihitung"],
+        ["Risiko Likuiditas","Sangat relevan saat uang ketat","Kurang menonjolkan likuiditas"]
+      ]
+    },
+    quiz:[
+      {c:"Kriteria Model",q:"Kriteria 'Realism' dalam model screening berarti…",o:["Model harus sangat mahal harganya","Mencerminkan tujuan, kendala nyata, dan risiko proyek","Hanya bisa digunakan oleh ahli statistik","Tidak bisa diubah-ubah"],a:1,x:"<b>Realism</b>: Model harus mencerminkan realitas organisasi (tujuan, biaya, risiko)."},
+      {c:"Payback",q:"Kelemahan utama metode Payback Period adalah…",o:["Terlalu sulit dihitung","Mengabaikan nilai waktu uang dan arus kas setelah payback","Selalu menghasilkan angka negatif","Hanya untuk proyek pemerintah"],a:1,x:"<b>Payback</b> mengabaikan <i>time value of money</i> dan tidak peduli apa yang terjadi setelah modal kembali."},
+      {c:"NPV",q:"Mengapa NPV dianggap lebih unggul daripada Payback?",o:["Karena lebih cepat dihitung","Karena mempertimbangkan seluruh arus kas dan nilai waktu uang","Karena tidak butuh data biaya","Karena hasilnya selalu dalam bentuk persentase"],a:1,x:"<b>NPV</b> adalah standar emas karena menghitung nilai sekarang dari seluruh manfaat ekonomi proyek."},
+      {c:"Matriks",q:"Proyek yang secara teknis sulit namun memiliki potensi komersial besar disebut…",o:["Pearls","Bread & Butter","Oysters","White Elephants"],a:2,x:"<b>Oysters</b>: Proyek revolusioner yang teknisnya sulit (belum terbukti) tapi hadiahnya besar jika berhasil."},
+      {c:"White Elephant",q:"White Elephant sering dipertahankan meskipun gagal karena alasan…",o:["Keuntungan yang terlalu besar","Escalation of commitment (sudah terlanjur keluar banyak biaya)","Teknis yang terlalu mudah","Dukungan dari pelanggan baru"],a:1,x:"<b>White Elephants</b> sering bertahan karena faktor politik atau ketidakmampuan mengakui kegagalan (Escalation of Commitment)."},
+      {c:"Portfolio",q:"Tujuan utama manajemen portofolio proyek adalah…",o:["Hanya mencari satu proyek terbesar","Menyeimbangkan risiko dan return dari berbagai jenis proyek","Menghabiskan seluruh anggaran perusahaan","Menambah jumlah karyawan"],a:1,x:"Manajemen portofolio bertujuan <b>menyeimbangkan</b> investasi agar tidak bertaruh pada satu proyek saja."}
+    ],
+    wawancara:[
+      {t:"Melati vs Kenanga",c:"Seleksi Proyek (Payback vs NPV)",q:[
+        ["Mengapa Melati menang di Payback tapi kalah di NPV?","Melati memberikan uang lebih cepat di awal, tapi Kenanga menghasilkan total nilai jauh lebih besar dalam jangka panjang."],
+        ["Kapan perusahaan tetap memilih Melati (Payback)?","Saat likuiditas sedang ketat atau masa depan pasar sangat tidak pasti (butuh uang kembali secepatnya)."],
+        ["Mengapa NPV tetap menjadi rujukan utama?","Karena NPV mengukur penciptaan nilai nyata yang sudah didiskon ke nilai saat ini."]]},
+      {t:"Otopsi Quibi",c:"Kegagalan Kriteria Seleksi",q:[
+        ["Apa kesalahan utama Quibi menurut kriteria screening?","Gagal dalam aspek 'Realism' — asumsi pasar tidak mencerminkan kebutuhan nyata (The app nobody wanted)."],
+        ["Pelajaran apa yang didapat dari kegagalan investasi $1,75 M ini?","Memilih proyek yang salah dengan metode yang rapi (investor besar, CEO top) tetap menghasilkan proyek yang salah."],
+        ["Kriteria apa yang seharusnya lebih ditekankan?","Customer acceptance dan validasi kebutuhan pasar sebelum pendanaan masif."]]},
+      {t:"Berburu Gajah Putih",c:"Portfolio & Escalation of Commitment",q:[
+        ["Mengapa White Elephant sulit dihentikan?","Karena sudah terlanjur banyak biaya keluar (Sunk Cost) dan sering didukung orang penting."],
+        ["Bagaimana cara mengidentifikasi White Elephant dalam organisasi?","Cek proyek dengan kelayakan teknis rendah tapi terus menyedot dana tanpa potensi komersial yang jelas."],
+        ["Apa kaitan Bab 3 ini dengan Bab 2?","Konsep 'Escalation of Commitment' dari konteks organisasi (Bab 2) menjadi alasan utama lahirnya White Elephant (Bab 3)."]]}
+    ]
+  },
+  {
+    label:"Pertemuan 4", sub:"Bab 4 · Leadership and the Project Manager",
+    cards:[
+      {icon:"🧭",h:"Pemimpin vs Manajer",lvl:"KONSEP",p:"Pemimpin: melakukan hal yang benar (fokus orang, perubahan, efektivitas, kepercayaan, jangka panjang). Manajer: melakukan hal dengan benar (fokus sistem, status quo, efisiensi, kepatuhan, jangka pendek). Proyek butuh keduanya — bukan satu, tapi keduanya berpadu."},
+      {icon:"🤝",h:"Empat Syarat Kemitraan",lvl:"BLOC",p:"1) Exchange of purpose: visi dibangun melalui dialog, bukan diumumkan. 2) A right to say no: kalah dalam perdebatan diperbolehkan. 3) Joint accountability: hasil proyek milik bersama. 4) Absolute honesty: semua informasi jadi milik bersama. Kepemimpinan bisa dipelajari, bukan bakat bawaan."},
+      {icon:"💡",h:"Emotional Intelligence",lvl:"EI",p:"Lima unsur: 1) Self-awareness: pahami kekuatan & kelemahan. 2) Self-regulation: berpikir sebelum bertindak. 3) Motivation: terdorong potensi maksimal. 4) Empathy: kenali perbedaan tim. 5) Social skill: kemampuan menggerakkan orang dengan tujuan."},
+      {icon:"⚡",h:"Empat Perilaku Inti",lvl:"PERILUH",p:"1) Memotivasi & membangun tim (5 sebab: tujuan kabur, tak ada motivasi, kebutuhan dikecilkan, terlalu banyak proyek, saling tidak percaya). 2) Mendapatkan sumber daya. 3) Visi & memadamkan kebakaran. 4) Berkomunikasi. Tabel: 31,5% kegagalan proyek karena kurangnya dukungan manajemen puncak."},
+      {icon:"🏆",h:"Empat Tipe Champion",lvl:"CHAMPION",p:"1) Creative originator: penemu ide asli. 2) Entrepreneur: jual ide ke seluruh org. 3) Godfather/sponsor: lindungi, danai, tenangkan. 4) Project manager. Traditional: teknis, koordinasi, kontrol. Non-traditional: visionary, politician. 16/17 proyek sukses punya champion."},
+      {icon:"⚖️",h:"Empat Bentuk Tidak Etis",lvl:"ETIKA",p:"1) Korupsi & penyuapan: Odebrecht bayar US$800j suap di 15+ negara. 2) Penipuan: menawar rendah, naikkan via change order. 3) Kickback: gelembubungkan biaya subkontrak. 4) Pemerasan: blokir kerja sampai bayaran tak resmi. Sulit membedakan 'baksheesh' budaya dari suap ilegal."}
+    ],
+    blocks:[
+      {icon:"🎯",h:"Empat Perilaku Inti Pemimpin",lvl:"RISET",items:[
+        "Mendapatkan sumber daya: lima sebab proyek kekurangan dana — (1) tujuan kabur, (2) tak ada motivasi, (3) kebutuhan dikecilkan, (4) terlalu banyak proyek, (5) saling tidak percaya.",
+        "Memotivasi & membangun tim: motivasi harus dari dalam diri, tidak bisa dipaksakan oleh sponsor atau bonus ekstrinsik."]},
+      {icon:"🔥",h:"Visi & Memadamkan Kebakaran",lvl:"MANAJEMEN",items:[
+        "Lihat hutan, tapi tahu tiap pohon: jangan sampai kehilangan gambaran penuh dan detail.",
+        "Komunikasikan: jika mereka tak tahu apa yang kamu kerjakan, hasilnya dianggap tidak ada."]},
+      {icon:"💡",h:"Lima Unsur Emotional Intelligence",lvl:"EMOSI",items:[
+        "Self-awareness: pahami kekuatan, kelemahan, dan dorongan diri sendiri.",
+        "Self-regulation: berpikir sebelum bertindak, hindari impulsif.",
+        "Motivation: terdorong mencapai potensi maksimal, sukai ukuran kemajuan yang jelas.",
+        "Empathy: kenali perbedaan tiap anggota tim dan sesuaikan perlakuan.",
+        "Social skill: kemampuan menggerakkan orang dengan ramah namun tuju."]}
+    ],
+    table:{
+      title:"Pemimpin vs Manajer",
+      note:"Bukan daftar 'pemimpin baik, manajer buruk'. Proyek butuh keduanya.",
+      first:"Aspek",
+      low:"▸ Pemimpin", diff:"▸ Manajer",
+      rows:[
+        ["Melakukan hal yang benar","Melakukan hal dengan benar"],
+        ["Berfokus pada orang","Berfokus pada sistem"],
+        ["Memeluk perubahan","Mempertahankan status quo"],
+        ["Mengejar efektivitas","Mengejar efisiensi"],
+        ["Mendapatkan kepercayaan","Menuntur kepatuhan"],
+        ["Berpandangan jangka panjang","Berpandang jangka pendek"]
+      ]
+    },
+    quiz:[
+      {c:"Pemimpin vs Manajer",q:"Apa yang membedakan pemimpin dan manajer menurut Bab 4?",o:["Pemimpin fokus orang, manajer fokus sistem","Pemimpin selalu benar, manajer selalu salah","Pemimpin tidak perlu tim, manajer bekerja sendiri","Pemimpin tidak butuh visi"],a:0,x:"<b>Pemimpin</b> fokus orang, perubahan, efektivitas, kepercayaan, jangka panjang. <b>Manajer</b> fokus sistem, status quo, efisiensi, kepatuhan, jangka pendek. Proyek butuh keduanya."},
+      {c:"Block Partnership",q:"Syarat kemitraan Block mana yang paling sulit di org. hierarkis?",o:["Exchange of purpose","A right to say no","Joint accountability","Absolute honesty"],a:1,x:"<b>A right to say no</b> justru paling sulit: karyawan harus bisa menolak dalam perdebatan, tapi otoritas formal sering menolak ini di org tradisional."},
+      {c:"Emotional Intelligence",q:"Pada kasus Kathy Smith, unsur EI apa yang paling kurang?",o:["Self-awareness","Self-regulation","Motivation","Empathy"],a:3,x:"<b>Empathy</b>: Kathy tidak mengenali perbedaan anggota tim lokal. Timnya merasa dibenci karena gaya manajemen tak menyesuaikan budaya."},
+      {c:"Champion",q:"Dari 17 proyek, 16 sukses karena champion. Tipe champion tradisional mana paling krusial?",o:["Creative originator","Entrepreneur","Godfather/sponsor","Project manager"],a:2,x:"<b>Godfather/sponsor</b>: melindungi, mendanai, menenangkan. Tanpa dukungan ini, ide akan mati."},
+      {c:"Etika",q:"Volkswagen Dieselgate termasuk praktik tidak etis mana?",o:["Korupsi & penyuapan","Penipuan","Kickback","Pemerasan"],a:1,x:"<b>Penipuan yang disengaja</b>: Dieselgate melibatkan manipulasi software untuk menyembunyikan emisi. Menawar rendah untuk menang, lalu mengubah nilai kontrak."},
+      {c:"Leadership Gap",q:"Manajer proyek tanpa otoritas memecat — strategi paling efektif?",o:["Beri bonus besar","Kenakan sanksi keras","Gunakan pengaruh: visi, kepercayaan, joint accountability","Promosikan diri","Biarkan saja"],a:2,x:"<b>Pengaruh bukan otoritas</b>: jadwalkan dialog tentang visi bersama, ciptakan safety culture, ikuti 'right to say no' untuk konstruktivitas."}
+    ],
+    wawancara:[
+      {t:"Simon Sinek: Why Good Leaders Make You Feel Safe",c:"Safety and Team Psychology",q:[
+        ["Apa yang membuat karyawan merasa aman melaporkan kabar buruk?","Safety budaya, bukan proses semata. Leader yang membuat tim aman akan menerima kabar buruk terbuka, bukan menyalahkan."],
+        ["Authority vs kepercayaan — peranannya?","Authority tidak menjamin kepercayaan. Orang yang paling kamu ikuti mungkin tidak punya jabatan resmi, namun jadi model yang paling ditiru."],
+        ["Mengapa 'just culture' krusial di proyek?","Tanpa safety, kecemasan membuat orang menyembunyikan kesalahan justru pada fase wajib dilaporkan — meningkatkan risiko proyek."]]},
+      {t:"Daniel Goleman: Emotional Intelligence in Leadership",c:"Diagnosis Kathy Smith",q:[
+        ["Unsur EI apa yang paling kurang dimiliki Kathy?","Empathy — Kathy mengutamakan ritmenya, tak menyesuaikan budaya tim lokal di Asia Tenggara."],
+        ["Ini kesalahan manajerial atau kepemimpinan?","Keduanya: manajerial (gagal kelola sumber daya manusia lintas budaya) dan kepemimpinan (kehilangan empati serta social skill)."],
+        ["Bagaimana Kathy perbaiki situasinya?","Jadwalkan pertemuan satu per satu dengan stakeholder lokal; dengarkan sebelum memimpin. Leadership bukan hanya motivasi, tapi juga mendengarkan aktif."]]},
+      {t:"3M Post-it: The Accidental Billion Dollar Invention",c:"Berburu Champion",q:[
+        ["Apa peran champion dalam inovasi proyek?","Champion adalah orang yang bertaruh pada ide — walau risiko gagal tinggi. 16/17 produk sukses punya champion."],
+        ["Creative originator vs entrepreneur — bedanya?","Originator ciptakan ide asli; entrepreneur kemas dan jual ke seluruh org. Keduanya diperlukan agar ide bisa berkembang."],
+        ["Traditional vs non-traditional champion?","Traditional: pemahaman teknis, koordinasi, kontrol. Non-traditional: visionary, politician, cheerleader — membangun dukungan di luar tim."]]},
+      {t:"Dieselgate: The Volkswagen Emissions Scandal",c:"Etika vs Keuntungan",q:[
+        ["Di titik manakah Dieselgate seharusya berhenti?","Setiap tahap keputusan etis: engineering, middle management, board — semua punya kesempatan menghentikan, tapi tidak berbuat apa-apa."],
+        ["Bagaimana 'absolute honesty' Block dilanggar?","Software dimanipulasi untuk menyembunyikan emisi sebenarnya. Visi dibungkam, bukan didialogkan melalui proses Block partnership."],
+        ["Mengapa menghentikan lebih sulit dibanding membiayai?","Ini escalation of commitment level ekstram — sudah terlalu jalan. Setiap langkah memperdalam 'sunk cost' yang sudah ada."]]},
+      {t:"Leadership Gap: Kewenangan vs Tanggung Jawab",c:"Human Resource Constraints",q:[
+        ["Bagaimana memotivasi tim tanpa otoritas memecat/bonus?","Gunakan pengaruh, bukan otoritas: visi bersama, kepercayaan, dan 'right to say no' untuk menjaga konstruktivitas."],
+        ["Apakah pengakuan lebih kuat dari insentif formal?","Ya — ketika otoritas terbatas, pengakuan atas kontribusi kongkret jauh lebih kuat karena tidak terikat budget formal."],
+        ["Tim teknis VW tak bisa memecat: apa yang harus dilakukan?","Dorong budaya etis (whistleblower protection), jangan ikut menyelesaikan masalah teknis. Fokus pada safety culture agar kabar buram tak tersembunyi."]]}
     ]
   }
   ]
